@@ -314,13 +314,25 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
 </head>
 <body>
 
+<!-- Приховані форми-шаблони для Netlify Forms (потрібні для розпізнавання полів) -->
+<form name="lead" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name">
+  <input type="text" name="phone">
+  <input type="text" name="scenario">
+</form>
+<form name="analytics" data-netlify="true" hidden>
+  <input type="text" name="event">
+  <input type="text" name="detail">
+</form>
+
+
 
 <header>
   <div class="header-in">
     <div class="logo">LTV <span>Pulse</span></div>
     <div class="header-right">
 
-      <a class="btn btn-sm" href="#" onclick="openForm();return false;">Розрахувати вартість</a>
+      <a class="btn btn-sm" href="#" onclick="openForm('header');return false;">Розрахувати вартість</a>
     </div>
   </div>
 </header>
@@ -337,7 +349,7 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
         <div class="hero-point"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="var(--y-light)"/><path d="M8 12.5l2.5 2.5L16 9" stroke="var(--y-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Забезпечуємо 100% адаптацію менеджерами без саботажу та хаосу в процесах.</span></div>
       </div>
       <div class="hero-cta">
-        <a class="btn btn-pulse" href="#" onclick="openForm();return false;">Отримати розрахунок для моєї команди</a>
+        <a class="btn btn-pulse" href="#" onclick="openForm('hero');return false;">Отримати розрахунок для моєї команди</a>
         <a class="hero-msg-link" href="#form"><svg width="16" height="16" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"><circle cx="120" cy="120" r="120" fill="#29A9EB"/><path d="M54 122.5c40-17.5 66.7-29 80-34.5 38-15.8 45.9-18.6 51-18.7 1.1 0 3.6.3 5.3 1.6 1.4 1.1 1.8 2.6 2 3.7.2 1.1.4 3.5.2 5.4-2 21.5-10.9 73.6-15.4 97.7-1.9 10.2-5.7 13.6-9.3 14-8 .7-14 -5.3-21.7 -10.4 -12.1-7.9-18.9-12.8-30.6-20.5-13.6-8.9-4.8-13.8 3-21.8 2-2.1 37-33.9 37.7-36.8.1-.4.2-1.7-.6-2.4-.8-.7-2-.5-2.9-.3-1.2.3-20.9 13.3-58.9 39-5.6 3.8-10.6 5.7-15.2 5.6-5-.1-14.6-2.8-21.8-5.2-8.8-2.9-15.8-4.4-15.2-9.4.3-2.6 3.8-5.2 10.4-7.9z" fill="#fff"/></svg> Обговорити проект у Telegram →</a>
       </div>
       <div class="hero-eyebrow-bottom">Впровадження, підбір та реанімація CRM під B2B-продажі</div>
@@ -433,13 +445,13 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
         <span class="scn-tag">CRM ще немає</span>
         <h3>Систематизація та впровадження CRM з нуля</h3>
         <p>Створюємо єдине цифрове середовище для продажів: оцифровуємо регламенти, будуємо воронку продажів, інтегруємо телефонію, сайт, пошту та месенджери. Клієнт отримує високий рівень сервісу з першого контакту.</p>
-        <a class="btn btn-block" href="#" onclick="setScenario('Шукаю CRM');openForm();return false;">Підібрати CRM під мій бізнес</a>
+        <a class="btn btn-block" href="#" onclick="setScenario('Шукаю CRM');openForm('scenario_none');return false;">Підібрати CRM під мій бізнес</a>
       </div>
       <div class="scn-card">
         <span class="scn-tag">CRM є, але не працює</span>
         <h3>Аудит, перезапуск та адаптація наявної CRM</h3>
         <p>Усуваємо технічні помилки, переналаштовуємо воронки під реальний цикл угоди, автоматизуємо рутину та навчаємо персонал. Перетворюємо систему з «контролера» на робочий інструмент менеджера.</p>
-        <a class="btn btn-block" href="#" onclick="setScenario('CRM є, не працює');openForm();return false;">Оживити та налаштувати наявну CRM</a>
+        <a class="btn btn-block" href="#" onclick="setScenario('CRM є, не працює');openForm('scenario_have');return false;">Оживити та налаштувати наявну CRM</a>
       </div>
     </div>
   </div>
@@ -516,7 +528,7 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
       <div class="price-card">
         <h3>Точний розрахунок під ваш кейс</h3>
         <p>Не пропонуємо шаблонних рішень. Кошторис формується за результатами короткого розбору вашого бізнесу.</p>
-        <a class="btn btn-block" href="#" onclick="openForm();return false;">Отримати персональний розрахунок</a>
+        <a class="btn btn-block" href="#" onclick="openForm('price');return false;">Отримати персональний розрахунок</a>
       </div>
     </div>
   </div>
@@ -575,7 +587,7 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
         <h2>Отримайте детальний розрахунок та план впровадження CRM</h2>
         <p>Коротка форма — зв'яжемося протягом робочого дня та надамо попередню оцінку проекту.</p>
       </div>
-      <button class="btn" onclick="openForm()">Отримати розрахунок та план дій</button>
+      <button class="btn" onclick="openForm('form_section')">Отримати розрахунок та план дій</button>
     </div>
   </div>
 </section>
@@ -593,11 +605,11 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
       <form class="form-grid" id="leadForm" onsubmit="submitLead(event)" style="max-width:none">
         <div class="form-row">
           <label>Ім'я</label>
-          <input type="text" placeholder="Як до вас звертатися?" required>
+          <input type="text" id="leadName" name="name" placeholder="Як до вас звертатися?" required>
         </div>
         <div class="form-row">
           <label>Телефон або Telegram</label>
-          <input type="text" placeholder="+380... або @username" required>
+          <input type="text" id="leadPhone" name="phone" placeholder="+380... або @username" required>
         </div>
         <div class="form-row">
           <label>Ваша ситуація</label>
@@ -655,12 +667,22 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
 <script>
 function submitLead(e){
   e.preventDefault();
+  var name = document.getElementById('leadName').value;
+  var phone = document.getElementById('leadPhone').value;
+  var scenario = document.getElementById('scenarioSelect').value || 'не вказано';
+  fetch('/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: encodeFormData({'form-name': 'lead', name: name, phone: phone, scenario: scenario})
+  }).catch(function(){});
+  trackEvent('lead_submitted', scenario);
   document.getElementById('leadForm').style.display = 'none';
   document.getElementById('thankyou').classList.add('show');
   return false;
 }
 
 function openPolicy(){
+  trackEvent('open_policy','');
   document.getElementById('policyOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -672,7 +694,21 @@ document.getElementById('policyOverlay').addEventListener('click', function(e){
   if(e.target === this) closePolicy();
 });
 
-function openForm(){
+function encodeFormData(data){
+  return Object.keys(data).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]); }).join('&');
+}
+function trackEvent(eventName, detail){
+  try{
+    fetch('/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: encodeFormData({'form-name': 'analytics', event: eventName, detail: detail || ''})
+    }).catch(function(){});
+  }catch(err){}
+}
+
+function openForm(source){
+  trackEvent('open_form', source || 'unknown');
   document.getElementById('formOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -734,6 +770,7 @@ function updateTest(){
     }
   });
   testResult.classList.add('show');
+  trackEvent('minitest_change', 'score_' + score);
   if(score === 0){
     testResult.innerHTML = 'Ваші процеси систематизовані. Рекомендуємо регулярний аудит автоматизацій.';
     return;
@@ -749,7 +786,7 @@ function updateTest(){
   var scenarioValue = 'Шукаю CRM';
   if(haveCount > 0 && noneCount === 0) scenarioValue = 'CRM є, не працює';
 
-  testResult.innerHTML = '<b>Результат:</b> у вашій ситуації <ul style="margin:8px 0 8px 18px;padding:0">' + risksHtml + '</ul>' + closing + ' <a href="#" onclick="setScenario(\'' + scenarioValue + '\');openForm();return false;" style="color:var(--y-dark);font-weight:700">Отримати персональний розбір кейсу →</a>';
+  testResult.innerHTML = '<b>Результат:</b> у вашій ситуації <ul style="margin:8px 0 8px 18px;padding:0">' + risksHtml + '</ul>' + closing + ' <a href="#" onclick="setScenario(\'' + scenarioValue + '\');openForm(\'minitest\');return false;" style="color:var(--y-dark);font-weight:700">Отримати персональний розбір кейсу →</a>';
 }
 testItems.forEach(function(el){ el.addEventListener('change', updateTest); });
 // Scroll-анімація появи блоків
