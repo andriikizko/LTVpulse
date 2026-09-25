@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LTV Pulse — Адмінка</title>
+<style>
+:root{
+  --y:#2563EB; --y-dark:#1D4ED8; --y-light:#EFF4FF;
+  --d:#0D0D0D; --d2:#1a1a1a; --gray:#6E6E6E; --gray2:#8A8A8A;
+  --bg-alt:#F8F8F8; --border:#e6e6e6;
+  --radius-lg:24px; --radius-md:16px; --radius-pill:999px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Inter",Arial,sans-serif;background:var(--bg-alt);color:var(--d2)}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 24px}
+
+/* login */
+#loginBox{max-width:380px;margin:120px auto;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px;box-shadow:0 10px 30px rgba(13,13,13,.06);text-align:center}
+#loginBox h1{font-size:20px;margin:0 0 20px}
+#loginBox input{width:100%;height:50px;border-radius:var(--radius-pill);border:1.5px solid var(--border);padding:0 20px;font-size:15px;margin-bottom:14px;outline:none}
+#loginBox input:focus{border-color:var(--y)}
+#loginBox button{width:100%;height:50px;border-radius:var(--radius-pill);border:0;background:var(--y);color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+#loginBox button:hover{background:var(--y-dark)}
+#loginError{color:#dc2626;font-size:13px;margin-top:12px;display:none}
+
+/* dashboard */
+#dashboard{display:none}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.top h1{font-size:24px;margin:0}
+.btn-refresh{height:42px;padding:0 18px;border-radius:var(--radius-pill);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:14px;font-weight:600}
+.btn-refresh:hover{border-color:var(--y);color:var(--y)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+@media(max-width:700px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-md);padding:20px}
+.kpi-num{font-size:28px;font-weight:800;color:var(--d)}
+.kpi-label{font-size:13px;color:var(--gray);margin-top:4px}
+
+.section-title{font-size:16px;font-weight:700;margin:0 0 14px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:28px}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;padding:10px 12px;color:var(--gray);font-weight:600;font-size:12px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+td{padding:12px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 10px;border-radius:var(--radius-pill);background:var(--y-light);color:var(--y-dark)}
+.empty{color:var(--gray2);font-size:14px;padding:20px 0;text-align:center}
+
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.bar-label{width:160px;flex:none;font-size:13px;color:var(--d2)}
+.bar-track{flex:1;background:var(--bg-alt);border-radius:8px;height:22px;overflow:hidden}
+.bar-fill{background:var(--y);height:100%;border-radius:8px}
+.bar-count{width:36px;flex:none;font-size:13px;font-weight:700;text-align:right}
+</style>
+</head>
+<body>
+
+<div id="loginBox">
+  <h1>LTV Pulse — Адмінка</h1>
+  <input type="password" id="pwdInput" placeholder="Пароль">
+  <button onclick="login()">Увійти</button>
+  <div id="loginError">Невірний пароль</div>
+</div>
+
+<div id="dashboard">
+  <div class="wrap">
+    <div class="top">
+      <h1>Заявки та аналітика</h1>
+      <button class="btn-refresh" onclick="loadData()">↻ Оновити</button>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi-card"><div class="kpi-num" id="kpiLeads">—</div><div class="kpi-label">Заявок усього</div></div>
+      <div class="kpi-card"><div class="kpi-num" id="kpiLeadsToday">—</div><div class="kpi-label">Заявок сьогодні</div></div>
+      <div class="kpi-card"><div class="kpi-num" id="kpiEvents">—</div><div class="kpi-label">Подій усього</div></div>
+      <div class="kpi-card"><div class="kpi-num" id="kpiOpens">—</div><div class="kpi-label">Відкриттів форми</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Заявки</div>
+      <div id="leadsTableWrap"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Звідки відкривали форму (по джерелу CTA)</div>
+      <div id="sourceChart"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Усі події (останні 50)</div>
+      <div id="eventsTableWrap"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PWD = sessionStorage.getItem('ltv_admin_pwd') || '';
+
+function login(){
+  var val = document.getElementById('pwdInput').value;
+  PWD = val;
+  loadData(true);
+}
+
+function esc(s){
+  var d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+
+function loadData(fromLogin){
+  fetch('/api/admin-data?password=' + encodeURIComponent(PWD))
+    .then(function(r){
+      if(r.status === 401){ throw new Error('unauthorized'); }
+      return r.json();
+    })
+    .then(function(data){
+      sessionStorage.setItem('ltv_admin_pwd', PWD);
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      render(data);
+    })
+    .catch(function(err){
+      if(fromLogin){
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+}
+
+function render(data){
+  var leads = data.leads || [];
+  var events = data.events || [];
+
+  document.getElementById('kpiLeads').textContent = leads.length;
+  document.getElementById('kpiEvents').textContent = events.length;
+
+  var today = new Date().toISOString().slice(0,10);
+  var leadsToday = leads.filter(function(l){ return (l.created_at||'').slice(0,10) === today; }).length;
+  document.getElementById('kpiLeadsToday').textContent = leadsToday;
+
+  var opens = events.filter(function(e){ return (e.data && e.data.event) === 'open_form'; }).length;
+  document.getElementById('kpiOpens').textContent = opens;
+
+  // Leads table
+  var leadsHtml = '';
+  if(leads.length === 0){
+    leadsHtml = '<div class="empty">Заявок поки немає</div>';
+  } else {
+    leadsHtml = '<table><thead><tr><th>Дата</th><th>Ім\\'я</th><th>Телефон</th><th>Сценарій</th></tr></thead><tbody>';
+    leads.slice().reverse().forEach(function(l){
+      var d = l.data || {};
+      var date = l.created_at ? new Date(l.created_at).toLocaleString('uk-UA') : '—';
+      leadsHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.phone) + '</td><td><span class="tag">' + esc(d.scenario) + '</span></td></tr>';
+    });
+    leadsHtml += '</tbody></table>';
+  }
+  document.getElementById('leadsTableWrap').innerHTML = leadsHtml;
+
+  // Source breakdown chart (open_form events by detail)
+  var counts = {};
+  events.forEach(function(e){
+    var d = e.data || {};
+    if(d.event === 'open_form'){
+      var key = d.detail || 'невідомо';
+      counts[key] = (counts[key] || 0) + 1;
+    }
+  });
+  var keys = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; });
+  var max = keys.length ? counts[keys[0]] : 1;
+  var chartHtml = '';
+  if(keys.length === 0){
+    chartHtml = '<div class="empty">Подій відкриття форми поки немає</div>';
+  } else {
+    keys.forEach(function(k){
+      var pct = Math.round((counts[k]/max)*100);
+      chartHtml += '<div class="bar-row"><div class="bar-label">' + esc(k) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div><div class="bar-count">' + counts[k] + '</div></div>';
+    });
+  }
+  document.getElementById('sourceChart').innerHTML = chartHtml;
+
+  // All events table (last 50)
+  var evHtml = '';
+  if(events.length === 0){
+    evHtml = '<div class="empty">Подій поки немає</div>';
+  } else {
+    evHtml = '<table><thead><tr><th>Дата</th><th>Подія</th><th>Деталі</th></tr></thead><tbody>';
+    events.slice().reverse().slice(0,50).forEach(function(e){
+      var d = e.data || {};
+      var date = e.created_at ? new Date(e.created_at).toLocaleString('uk-UA') : '—';
+      evHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.event) + '</td><td>' + esc(d.detail) + '</td></tr>';
+    });
+    evHtml += '</tbody></table>';
+  }
+  document.getElementById('eventsTableWrap').innerHTML = evHtml;
+}
+
+document.getElementById('pwdInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') login();
+});
+
+if(PWD){ loadData(false); }
+</script>
+
+</body>
+</html>
