@@ -119,6 +119,10 @@ function loadData(fromLogin){
       sessionStorage.setItem('ltv_admin_pwd', PWD);
       document.getElementById('loginBox').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
+      if(data.error){
+        document.getElementById('leadsTableWrap').innerHTML = '<div class="empty" style="color:#dc2626">Помилка сервера: ' + esc(data.error) + (data.details ? ' — ' + esc(JSON.stringify(data.details)) : '') + '</div>';
+        return;
+      }
       render(data);
     })
     .catch(function(err){
