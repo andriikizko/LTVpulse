@@ -421,11 +421,11 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
       <h3>Тест: чи потрібна вашій компанії систематизація CRM?</h3>
       <p class="test-hint">Позначте пункти, які відповідають поточній ситуації у вашій компанії (займає 30 секунд).</p>
       <div id="testItems">
-        <label class="test-item"><input type="checkbox" data-scenario="none" data-risk="база клієнтів розпорошена по файлах і месенджерах — легко втратити частину контактів"> База клієнтів та угоди ведуться в Excel, Google Таблицях, блокнотах або приватних месенджерах</label>
-        <label class="test-item"><input type="checkbox" data-scenario="have" data-risk="CRM існує лише формально — реальні дані про клієнтів нею не покриті"> CRM-система придбана, але менеджери заповнюють її нерегулярно або «для галочки»</label>
-        <label class="test-item"><input type="checkbox" data-scenario="" data-risk="прострочені угоди залишаються непоміченими тижнями"> Немає можливості за 1 хвилину сформувати звіт по угодах без дій понад 7 днів</label>
-        <label class="test-item"><input type="checkbox" data-scenario="" data-risk="реальні причини втрати клієнтів не фіксуються, тому скрипти й процеси не покращуються"> Причини відмов від покупки відомі лише зі слів менеджерів, а не з аналітики системи</label>
-        <label class="test-item"><input type="checkbox" data-scenario="have" data-risk="команда вже має негативний досвід і чинитиме опір без окремої роботи з людьми"> Попередні спроби впровадити CRM викликали опір та саботаж з боку команди</label>
+        <label class="test-item"><input type="checkbox" data-scenario="none" data-risk="база клієнтів розпорошена по файлах і месенджерах — легко втратити частину контактів" data-insight="Частина клієнтів і домовленостей існує лише в головах менеджерів — звільнення чи забутий телефон, і історія угоди зникає"> База клієнтів та угоди ведуться в Excel, Google Таблицях, блокнотах або приватних месенджерах</label>
+        <label class="test-item"><input type="checkbox" data-scenario="have" data-risk="CRM існує лише формально — реальні дані про клієнтів нею не покриті" data-insight="Гроші на CRM вже витрачені, а реальної картини продажів як не було, так і немає"> CRM-система придбана, але менеджери заповнюють її нерегулярно або «для галочки»</label>
+        <label class="test-item"><input type="checkbox" data-scenario="" data-risk="прострочені угоди залишаються непоміченими тижнями" data-insight="Прострочені угоди тижнями лишаються непоміченими, поки конкурент встигає забрати клієнта"> Немає можливості за 1 хвилину сформувати звіт по угодах без дій понад 7 днів</label>
+        <label class="test-item"><input type="checkbox" data-scenario="" data-risk="реальні причини втрати клієнтів не фіксуються, тому скрипти й процеси не покращуються" data-insight="Неможливо системно покращити конверсію — ви не знаєте справжніх причин втрати клієнтів, лише версії менеджерів"> Причини відмов від покупки відомі лише зі слів менеджерів, а не з аналітики системи</label>
+        <label class="test-item"><input type="checkbox" data-scenario="have" data-risk="команда вже має негативний досвід і чинитиме опір без окремої роботи з людьми" data-insight="Технічне рішення тут не допоможе — без окремої роботи з людьми нова CRM повторить долю попередньої"> Попередні спроби впровадити CRM викликали опір та саботаж з боку команди</label>
       </div>
       <div id="testResult" class="test-result"></div>
     </div>
@@ -760,13 +760,13 @@ document.querySelectorAll('.faq-item').forEach(function(item){
 var testItems = document.querySelectorAll('#testItems input[type=checkbox]');
 var testResult = document.getElementById('testResult');
 function updateTest(){
-  var score = 0, noneCount = 0, haveCount = 0, risks = [];
+  var score = 0, noneCount = 0, haveCount = 0, insights = [];
   testItems.forEach(function(el){
     if(el.checked){
       score += 1;
       if(el.getAttribute('data-scenario') === 'none') noneCount += 1;
       if(el.getAttribute('data-scenario') === 'have') haveCount += 1;
-      risks.push(el.getAttribute('data-risk'));
+      insights.push(el.getAttribute('data-insight'));
     }
   });
   testResult.classList.add('show');
@@ -776,17 +776,17 @@ function updateTest(){
     return;
   }
 
-  var closing;
-  if(score === 1) closing = 'Поки що це точкова проблема, але вона вже коштує вам частини угод.';
-  else if(score <= 3) closing = 'Разом ці фактори означають відчутні втрати конверсії та ризик втратити частину бази.';
-  else closing = 'Разом ці фактори означають високий ризик системної втрати прибутку та клієнтів — варто діяти без зволікань.';
+  var urgency;
+  if(score === 1) urgency = 'Поки точкова проблема, але саме з неї часто починається системна втрата прибутку.';
+  else if(score <= 3) urgency = 'Разом ці фактори вже суттєво знижують конверсію та контроль над продажами.';
+  else urgency = 'Це комплексна проблема з високим ризиком втрати клієнтів і прибутку — тут потрібне швидке й системне рішення.';
 
-  var risksHtml = risks.map(function(r){ return '<li>' + r + '</li>'; }).join('');
+  var insightsHtml = insights.map(function(t){ return '<li>' + t + '</li>'; }).join('');
 
   var scenarioValue = 'Шукаю CRM';
   if(haveCount > 0 && noneCount === 0) scenarioValue = 'CRM є, не працює';
 
-  testResult.innerHTML = '<b>Результат:</b> у вашій ситуації <ul style="margin:8px 0 8px 18px;padding:0">' + risksHtml + '</ul>' + closing + ' <a href="#" onclick="setScenario(\'' + scenarioValue + '\');openForm(\'minitest\');return false;" style="color:var(--y-dark);font-weight:700">Отримати персональний розбір кейсу →</a>';
+  testResult.innerHTML = '<b>Результат:</b> <ul style="margin:8px 0 8px 18px;padding:0">' + insightsHtml + '</ul>' + urgency + ' <a href="#" onclick="setScenario(\'' + scenarioValue + '\');openForm(\'minitest\');return false;" style="color:var(--y-dark);font-weight:700">Отримати персональний розбір кейсу →</a>';
 }
 testItems.forEach(function(el){ el.addEventListener('change', updateTest); });
 // Scroll-анімація появи блоків
