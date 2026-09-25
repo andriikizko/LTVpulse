@@ -147,11 +147,11 @@ function render(data){
   if(leads.length === 0){
     leadsHtml = '<div class="empty">Заявок поки немає</div>';
   } else {
-    leadsHtml = '<table><thead><tr><th>Дата</th><th>Ім\\'я</th><th>Телефон</th><th>Сценарій</th></tr></thead><tbody>';
+    leadsHtml = '<table><thead><tr><th>Дата</th><th>Ім\\'я</th><th>Телефон</th><th>Email</th><th>Сценарій</th></tr></thead><tbody>';
     leads.slice().reverse().forEach(function(l){
       var d = l.data || {};
       var date = l.created_at ? new Date(l.created_at).toLocaleString('uk-UA') : '—';
-      leadsHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.phone) + '</td><td><span class="tag">' + esc(d.scenario) + '</span></td></tr>';
+      leadsHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.phone) + '</td><td>' + esc(d.email) + '</td><td><span class="tag">' + esc(d.scenario) + '</span></td></tr>';
     });
     leadsHtml += '</tbody></table>';
   }

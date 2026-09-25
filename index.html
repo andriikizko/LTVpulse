@@ -318,6 +318,7 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
 <form name="lead" data-netlify="true" netlify-honeypot="bot-field" hidden>
   <input type="text" name="name">
   <input type="text" name="phone">
+  <input type="text" name="email">
   <input type="text" name="scenario">
 </form>
 <form name="analytics" data-netlify="true" hidden>
@@ -612,6 +613,10 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
           <input type="text" id="leadPhone" name="phone" placeholder="+380... або @username" required>
         </div>
         <div class="form-row">
+          <label>Email</label>
+          <input type="email" id="leadEmail" name="email" placeholder="пошта@example.com">
+        </div>
+        <div class="form-row">
           <label>Ваша ситуація</label>
           <div class="custom-select" id="scenarioCustom">
             <button type="button" class="custom-select-trigger" id="scenarioTrigger" onclick="toggleScenarioDropdown()">Оберіть варіант зі списку <span class="custom-select-arrow">▾</span></button>
@@ -669,16 +674,17 @@ function submitLead(e){
   e.preventDefault();
   var name = document.getElementById('leadName').value;
   var phone = document.getElementById('leadPhone').value;
+  var email = document.getElementById('leadEmail').value;
   var scenario = document.getElementById('scenarioSelect').value || 'не вказано';
   fetch('/', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: encodeFormData({'form-name': 'lead', name: name, phone: phone, scenario: scenario})
+    body: encodeFormData({'form-name': 'lead', name: name, phone: phone, email: email, scenario: scenario})
   }).catch(function(){});
   fetch('/api/notify-lead', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name: name, phone: phone, scenario: scenario})
+    body: JSON.stringify({name: name, phone: phone, email: email, scenario: scenario})
   }).catch(function(){});
   trackEvent('lead_submitted', scenario);
   document.getElementById('leadForm').style.display = 'none';

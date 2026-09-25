@@ -19,12 +19,14 @@ export default async (req: Request, context: Context) => {
     const body = await req.json();
     const name = String(body.name || "—");
     const phone = String(body.phone || "—");
+    const email = String(body.email || "—");
     const scenario = String(body.scenario || "—");
 
     const text =
       "🔔 Нова заявка з LTV Pulse\n\n" +
       "Ім'я: " + name + "\n" +
       "Телефон/Telegram: " + phone + "\n" +
+      "Email: " + email + "\n" +
       "Ситуація: " + scenario;
 
     const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
