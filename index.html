@@ -675,6 +675,11 @@ function submitLead(e){
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: encodeFormData({'form-name': 'lead', name: name, phone: phone, scenario: scenario})
   }).catch(function(){});
+  fetch('/api/notify-lead', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name: name, phone: phone, scenario: scenario})
+  }).catch(function(){});
   trackEvent('lead_submitted', scenario);
   document.getElementById('leadForm').style.display = 'none';
   document.getElementById('thankyou').classList.add('show');
