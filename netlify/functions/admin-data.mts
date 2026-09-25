@@ -1,5 +1,6 @@
 import type { Context, Config } from "@netlify/functions";
 
+// v2 — force rebuild after env vars were added
 const SITE_ID = "f810996f-f560-4327-8eb9-fa95767727d8";
 
 export default async (req: Request, context: Context) => {
@@ -10,7 +11,10 @@ export default async (req: Request, context: Context) => {
   const TOKEN = Netlify.env.get("NETLIFY_API_TOKEN");
 
   if (!ADMIN_PASSWORD) {
-    return new Response(JSON.stringify({ error: "ADMIN_PASSWORD не налаштовано на сервері" }), {
+    return new Response(JSON.stringify({
+      error: "ADMIN_PASSWORD не налаштовано на сервері",
+      debug: { hasToken: !!TOKEN, hasPassword: !!ADMIN_PASSWORD }
+    }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
