@@ -136,6 +136,17 @@ function render(data){
   var leads = data.leads || [];
   var events = data.events || [];
 
+  if(data.note){
+    var noteEl = document.getElementById('dbNote');
+    if(!noteEl){
+      noteEl = document.createElement('div');
+      noteEl.id = 'dbNote';
+      noteEl.style.cssText = 'background:#FFF7E6;border:1px solid #FCD34D;border-radius:12px;padding:14px 18px;margin-bottom:24px;font-size:14px;color:#92400E';
+      document.querySelector('.top').insertAdjacentElement('afterend', noteEl);
+    }
+    noteEl.textContent = data.note;
+  }
+
   document.getElementById('kpiLeads').textContent = leads.length;
   document.getElementById('kpiEvents').textContent = events.length;
 
