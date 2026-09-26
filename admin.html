@@ -26,7 +26,12 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Inter",Arial,sans-se
 
 /* dashboard */
 #dashboard{display:none}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+
+.tabs{display:flex;gap:8px;margin-bottom:28px;border-bottom:1px solid var(--border)}
+.tab-btn{background:none;border:0;padding:10px 4px;margin-right:20px;font-size:15px;font-weight:600;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab-btn.active{color:var(--y-dark);border-bottom-color:var(--y)}
+.tab-btn:hover{color:var(--d)}
 .top h1{font-size:24px;margin:0}
 .btn-refresh{height:42px;padding:0 18px;border-radius:var(--radius-pill);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:14px;font-weight:600}
 .btn-refresh:hover{border-color:var(--y);color:var(--y)}
@@ -74,46 +79,65 @@ thead,tbody{display:table;width:100%;table-layout:auto}
 <div id="dashboard">
   <div class="wrap">
     <div class="top">
-      <h1>Заявки та аналітика</h1>
+      <h1>LTV Pulse — Адмінка</h1>
       <button class="btn-refresh" onclick="loadData()">↻ Оновити</button>
     </div>
 
-    <div class="kpis">
-      <div class="kpi-card"><div class="kpi-num" id="kpiLeads">—</div><div class="kpi-label">Заявок усього</div></div>
-      <div class="kpi-card"><div class="kpi-num" id="kpiLeadsToday">—</div><div class="kpi-label">Заявок сьогодні</div></div>
-      <div class="kpi-card"><div class="kpi-num" id="kpiEvents">—</div><div class="kpi-label">Подій усього</div></div>
-      <div class="kpi-card"><div class="kpi-num" id="kpiOpens">—</div><div class="kpi-label">Відкриттів форми</div></div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabBtnLeads" onclick="switchTab('leads')">Заявки</button>
+      <button class="tab-btn" id="tabBtnAnalytics" onclick="switchTab('analytics')">Аналітика</button>
     </div>
 
-    <div class="card">
-      <div class="section-title">Заявки</div>
-      <div id="leadsTableWrap"></div>
+    <div id="tabLeads" class="tab-panel">
+      <div class="kpis">
+        <div class="kpi-card"><div class="kpi-num" id="kpiLeads">—</div><div class="kpi-label">Заявок усього</div></div>
+        <div class="kpi-card"><div class="kpi-num" id="kpiLeadsToday">—</div><div class="kpi-label">Заявок сьогодні</div></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Заявки</div>
+        <div id="leadsTableWrap"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="section-title">Джерела трафіку (UTM / referrer)</div>
-      <div id="trafficChart"></div>
-    </div>
+    <div id="tabAnalytics" class="tab-panel" style="display:none">
+      <div class="kpis">
+        <div class="kpi-card"><div class="kpi-num" id="kpiEvents">—</div><div class="kpi-label">Подій усього</div></div>
+        <div class="kpi-card"><div class="kpi-num" id="kpiOpens">—</div><div class="kpi-label">Відкриттів форми</div></div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Звідки відкривали форму (по джерелу CTA)</div>
-      <div id="sourceChart"></div>
-    </div>
+      <div class="card">
+        <div class="section-title">Джерела трафіку (UTM / referrer)</div>
+        <div id="trafficChart"></div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Відвідувачі та їх шлях (<span id="visitorCount">0</span>)</div>
-      <div id="visitorsWrap"></div>
-    </div>
+      <div class="card">
+        <div class="section-title">Звідки відкривали форму (по джерелу CTA)</div>
+        <div id="sourceChart"></div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Усі події (останні 50)</div>
-      <div id="eventsTableWrap"></div>
+      <div class="card">
+        <div class="section-title">Відвідувачі та їх шлях (<span id="visitorCount">0</span>)</div>
+        <div id="visitorsWrap"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Усі події (останні 50)</div>
+        <div id="eventsTableWrap"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 var PWD = sessionStorage.getItem('ltv_admin_pwd') || '';
+
+function switchTab(name){
+  document.getElementById('tabLeads').style.display = name === 'leads' ? 'block' : 'none';
+  document.getElementById('tabAnalytics').style.display = name === 'analytics' ? 'block' : 'none';
+  document.getElementById('tabBtnLeads').classList.toggle('active', name === 'leads');
+  document.getElementById('tabBtnAnalytics').classList.toggle('active', name === 'analytics');
+}
 
 function login(){
   var val = document.getElementById('pwdInput').value;
