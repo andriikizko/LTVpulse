@@ -12,6 +12,7 @@ export default async function handler(req, res) {
   const phone = String(body.phone || "—");
   const email = String(body.email || "—");
   const scenario = String(body.scenario || "—");
+  const visitorId = String(body.visitor_id || "");
 
   // 1. Пишемо в Supabase
   let dbError = null;
@@ -25,7 +26,7 @@ export default async function handler(req, res) {
           Authorization: `Bearer ${SERVICE_KEY}`,
           Prefer: "return=minimal",
         },
-        body: JSON.stringify({ name, phone, email, scenario }),
+        body: JSON.stringify({ name, phone, email, scenario, visitor_id: visitorId }),
       });
       if (!r.ok) {
         dbError = await r.text();

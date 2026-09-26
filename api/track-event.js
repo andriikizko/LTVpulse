@@ -13,8 +13,16 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
-    const event = String(body.event || "");
-    const detail = String(body.detail || "");
+    const payload = {
+      event: String(body.event || ""),
+      detail: String(body.detail || ""),
+      visitor_id: String(body.visitor_id || ""),
+      utm_source: String(body.utm_source || ""),
+      utm_medium: String(body.utm_medium || ""),
+      utm_campaign: String(body.utm_campaign || ""),
+      referrer: String(body.referrer || ""),
+      page: String(body.page || ""),
+    };
 
     await fetch(`${SUPABASE_URL}/rest/v1/analytics_events`, {
       method: "POST",
@@ -24,7 +32,7 @@ export default async function handler(req, res) {
         Authorization: `Bearer ${SERVICE_KEY}`,
         Prefer: "return=minimal",
       },
-      body: JSON.stringify({ event, detail }),
+      body: JSON.stringify(payload),
     });
 
     res.status(200).json({ ok: true });

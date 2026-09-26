@@ -41,11 +41,11 @@ export default async function handler(req, res) {
     const leads = leadsRaw.map((l) => ({
       id: l.id,
       created_at: l.created_at,
-      data: { name: l.name, phone: l.phone, email: l.email, scenario: l.scenario, status: l.status, notes: l.notes },
+      data: { name: l.name, phone: l.phone, email: l.email, scenario: l.scenario, status: l.status, notes: l.notes, visitor_id: l.visitor_id },
     }));
     const events = eventsRaw.map((e) => ({
       created_at: e.created_at,
-      data: { event: e.event, detail: e.detail },
+      data: { event: e.event, detail: e.detail, visitor_id: e.visitor_id, utm_source: e.utm_source, utm_medium: e.utm_medium, utm_campaign: e.utm_campaign, referrer: e.referrer, page: e.page },
     }));
 
     res.status(200).json({ leads, events });

@@ -91,6 +91,11 @@ thead,tbody{display:table;width:100%;table-layout:auto}
     </div>
 
     <div class="card">
+      <div class="section-title">Джерела трафіку (UTM / referrer)</div>
+      <div id="trafficChart"></div>
+    </div>
+
+    <div class="card">
       <div class="section-title">Звідки відкривали форму (по джерелу CTA)</div>
       <div id="sourceChart"></div>
     </div>
@@ -190,6 +195,44 @@ function render(data){
   }
   document.getElementById('leadsTableWrap').innerHTML = leadsHtml;
 
+  // Traffic sources chart (по унікальних visitor_id — page_view події)
+  var visitorSource = {};
+  events.forEach(function(e){
+    var d = e.data || {};
+    if(d.event === 'page_view' && d.visitor_id){
+      if(!visitorSource[d.visitor_id]){
+        var src;
+        if(d.utm_source){
+          src = d.utm_source + (d.utm_medium ? '/' + d.utm_medium : '');
+        } else if(d.referrer){
+          var host = d.referrer;
+          try{ host = new URL(d.referrer).hostname || d.referrer; }catch(err){}
+          src = 'referrer: ' + host;
+        } else {
+          src = 'прямий захід';
+        }
+        visitorSource[d.visitor_id] = src;
+      }
+    }
+  });
+  var trafficCounts = {};
+  Object.keys(visitorSource).forEach(function(vid){
+    var src = visitorSource[vid];
+    trafficCounts[src] = (trafficCounts[src] || 0) + 1;
+  });
+  var trafficKeys = Object.keys(trafficCounts).sort(function(a,b){ return trafficCounts[b]-trafficCounts[a]; });
+  var trafficMax = trafficKeys.length ? trafficCounts[trafficKeys[0]] : 1;
+  var trafficHtml = '';
+  if(trafficKeys.length === 0){
+    trafficHtml = '<div class="empty">Даних про джерела поки немає</div>';
+  } else {
+    trafficKeys.forEach(function(k){
+      var pct = Math.round((trafficCounts[k]/trafficMax)*100);
+      trafficHtml += '<div class="bar-row"><div class="bar-label">' + esc(k) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div><div class="bar-count">' + trafficCounts[k] + '</div></div>';
+    });
+  }
+  document.getElementById('trafficChart').innerHTML = trafficHtml;
+
   // Source breakdown chart (open_form events by detail)
   var counts = {};
   events.forEach(function(e){
@@ -217,11 +260,11 @@ function render(data){
   if(events.length === 0){
     evHtml = '<div class="empty">Подій поки немає</div>';
   } else {
-    evHtml = '<table><thead><tr><th>Дата</th><th>Подія</th><th>Деталі</th></tr></thead><tbody>';
+    evHtml = '<table><thead><tr><th>Дата</th><th>Подія</th><th>Деталі</th><th>Visitor ID</th></tr></thead><tbody>';
     events.slice(0,50).forEach(function(e){
       var d = e.data || {};
       var date = e.created_at ? new Date(e.created_at).toLocaleString('uk-UA') : '—';
-      evHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.event) + '</td><td>' + esc(d.detail) + '</td></tr>';
+      evHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.event) + '</td><td>' + esc(d.detail) + '</td><td style="font-size:11px;color:var(--gray2)">' + esc(d.visitor_id) + '</td></tr>';
     });
     evHtml += '</tbody></table>';
   }

@@ -658,6 +658,35 @@ footer{padding:44px 0;border-top:1px solid var(--border)}
 </div>
 
 <script>
+// --- Visitor ID + джерело трафіку ---
+function getVisitorId(){
+  var id = localStorage.getItem('ltv_visitor_id');
+  if(!id){
+    id = 'v_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,10);
+    localStorage.setItem('ltv_visitor_id', id);
+  }
+  return id;
+}
+function getUTM(){
+  // Зберігаємо UTM з першого заходу (щоб не затерлись, якщо людина гуляє сторінкою без параметрів у наступних запитах)
+  var stored = localStorage.getItem('ltv_utm');
+  var params = new URLSearchParams(window.location.search);
+  var hasNew = params.get('utm_source') || params.get('utm_medium') || params.get('utm_campaign');
+  if(hasNew){
+    stored = JSON.stringify({
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || ''
+    });
+    localStorage.setItem('ltv_utm', stored);
+  }
+  if(stored) return JSON.parse(stored);
+  return { utm_source: '', utm_medium: '', utm_campaign: '' };
+}
+var VISITOR_ID = getVisitorId();
+var UTM = getUTM();
+var REFERRER = document.referrer || '';
+
 function submitLead(e){
   e.preventDefault();
   var name = document.getElementById('leadName').value;
@@ -667,7 +696,7 @@ function submitLead(e){
   fetch('/api/notify-lead', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name: name, phone: phone, email: email, scenario: scenario})
+    body: JSON.stringify({name: name, phone: phone, email: email, scenario: scenario, visitor_id: VISITOR_ID})
   }).catch(function(){});
   trackEvent('lead_submitted', scenario);
   document.getElementById('leadForm').style.display = 'none';
@@ -695,9 +724,15 @@ function trackEvent(eventName, detail){
   fetch('/api/track-event', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({event: eventName, detail: detail || ''})
+    body: JSON.stringify({
+      event: eventName, detail: detail || '',
+      visitor_id: VISITOR_ID,
+      utm_source: UTM.utm_source, utm_medium: UTM.utm_medium, utm_campaign: UTM.utm_campaign,
+      referrer: REFERRER, page: window.location.pathname
+    })
   }).catch(function(){});
 }
+trackEvent('page_view', '');
 
 function openForm(source){
   trackEvent('open_form', source || 'unknown');
