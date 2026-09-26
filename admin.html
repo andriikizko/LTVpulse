@@ -101,6 +101,11 @@ thead,tbody{display:table;width:100%;table-layout:auto}
     </div>
 
     <div class="card">
+      <div class="section-title">Відвідувачі та їх шлях (<span id="visitorCount">0</span>)</div>
+      <div id="visitorsWrap"></div>
+    </div>
+
+    <div class="card">
       <div class="section-title">Усі події (останні 50)</div>
       <div id="eventsTableWrap"></div>
     </div>
@@ -232,6 +237,67 @@ function render(data){
     });
   }
   document.getElementById('trafficChart').innerHTML = trafficHtml;
+
+  // Відвідувачі та їх шлях — групуємо всі події по visitor_id
+  var byVisitor = {};
+  events.forEach(function(e){
+    var d = e.data || {};
+    var vid = d.visitor_id || 'без id';
+    if(!byVisitor[vid]) byVisitor[vid] = [];
+    byVisitor[vid].push({ created_at: e.created_at, event: d.event, detail: d.detail });
+  });
+  var leadByVisitor = {};
+  leads.forEach(function(l){
+    var d = l.data || {};
+    if(d.visitor_id) leadByVisitor[d.visitor_id] = d.name || true;
+  });
+
+  var visitorIds = Object.keys(byVisitor).sort(function(a,b){
+    var lastA = byVisitor[a][0] ? byVisitor[a][0].created_at : '';
+    var lastB = byVisitor[b][0] ? byVisitor[b][0].created_at : '';
+    return lastB.localeCompare(lastA);
+  });
+
+  document.getElementById('visitorCount').textContent = visitorIds.length;
+
+  var eventLabels = {
+    page_view: '👀 Зайшов на сайт',
+    open_form: '📝 Відкрив форму',
+    minitest_change: '✅ Заповнював міні-тест',
+    open_policy: '📄 Відкрив політику',
+    lead_submitted: '🎯 Відправив заявку'
+  };
+
+  var visitorsHtml = '';
+  if(visitorIds.length === 0){
+    visitorsHtml = '<div class="empty">Даних поки немає</div>';
+  } else {
+    visitorIds.slice(0,100).forEach(function(vid, idx){
+      var evs = byVisitor[vid].slice().sort(function(a,b){ return (a.created_at||'').localeCompare(b.created_at||''); });
+      var first = evs[0], last = evs[evs.length-1];
+      var isLead = leadByVisitor[vid];
+      var rowId = 'visitor-row-' + idx;
+
+      var pathHtml = evs.map(function(ev){
+        var label = eventLabels[ev.event] || ev.event;
+        var time = ev.created_at ? new Date(ev.created_at).toLocaleTimeString('uk-UA') : '';
+        var detail = ev.detail ? ' (' + esc(ev.detail) + ')' : '';
+        return '<div style="padding:6px 0;font-size:13px;color:var(--d2);border-bottom:1px solid var(--border)">' + esc(time) + ' — ' + esc(label) + detail + '</div>';
+      }).join('');
+
+      visitorsHtml += '<div style="border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer" onclick="document.getElementById(\'' + rowId + '\').style.display = document.getElementById(\'' + rowId + '\').style.display===\'block\' ? \'none\' : \'block\'">' +
+          '<div>' +
+            '<b style="font-size:13px">' + esc(vid) + '</b>' +
+            (isLead ? ' <span class="tag" style="background:#DCFCE7;color:#15803D">заявка' + (isLead !== true ? ': ' + esc(isLead) : '') + '</span>' : '') +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--gray2)">' + evs.length + ' подій · перший захід ' + esc(new Date(first.created_at).toLocaleString('uk-UA')) + '</div>' +
+        '</div>' +
+        '<div id="' + rowId + '" style="display:none;padding:0 16px 14px;background:var(--bg-alt)">' + pathHtml + '</div>' +
+      '</div>';
+    });
+  }
+  document.getElementById('visitorsWrap').innerHTML = visitorsHtml;
 
   // Source breakdown chart (open_form events by detail)
   var counts = {};
