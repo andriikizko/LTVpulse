@@ -63,6 +63,13 @@ tr:last-child td{border-bottom:0}
 .save-btn{height:36px;padding:0 14px;border-radius:8px;border:0;background:var(--y);color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .save-btn:hover{background:var(--y-dark)}
 .save-btn:disabled{opacity:.6;cursor:default}
+
+.lead-card{border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+.lead-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:15px}
+.lead-card-date{font-size:12px;color:var(--gray2);flex:none}
+.lead-card-contact{font-size:13px;color:var(--gray);margin-top:4px}
+.lead-card-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.lead-card-row .notes-input{flex:1;min-width:140px}
 table{overflow-x:auto;display:block;white-space:nowrap}
 thead,tbody{display:table;width:100%;table-layout:auto}
 </style>
@@ -199,28 +206,37 @@ function render(data){
   var opens = events.filter(function(e){ return (e.data && e.data.event) === 'open_form'; }).length;
   document.getElementById('kpiOpens').textContent = opens;
 
-  // Leads table
+  // Leads — картки замість таблиці
   var leadsHtml = '';
   if(leads.length === 0){
     leadsHtml = '<div class="empty">Заявок поки немає</div>';
   } else {
-    leadsHtml = '<table><thead><tr><th>Дата</th><th>Ім’я</th><th>Телефон</th><th>Email</th><th>Сценарій</th><th>Статус</th><th>Нотатки</th><th></th></tr></thead><tbody>';
+    var statusOptions = ['новий','в роботі','призначено дзвінок','угода','відмова'];
     leads.forEach(function(l){
       var d = l.data || {};
       var date = l.created_at ? new Date(l.created_at).toLocaleString('uk-UA') : '—';
       var status = d.status || 'новий';
-      var statusOptions = ['новий','в роботі','призначено дзвінок','угода','відмова'];
       var selectHtml = '<select class="status-select" data-id="' + esc(l.id) + '">';
       statusOptions.forEach(function(s){
         selectHtml += '<option value="' + esc(s) + '"' + (s === status ? ' selected' : '') + '>' + esc(s) + '</option>';
       });
       selectHtml += '</select>';
-      leadsHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.phone) + '</td><td>' + esc(d.email) + '</td><td><span class="tag">' + esc(d.scenario) + '</span></td>' +
-        '<td>' + selectHtml + '</td>' +
-        '<td><input type="text" class="notes-input" data-id="' + esc(l.id) + '" value="' + esc(d.notes || '') + '" placeholder="нотатка..."></td>' +
-        '<td><button class="save-btn" data-id="' + esc(l.id) + '" onclick="saveLead(' + esc(l.id) + ')">Зберегти</button></td></tr>';
+
+      var contact = [d.phone, d.email].filter(Boolean).join(' · ');
+
+      leadsHtml += '<div class="lead-card">' +
+        '<div class="lead-card-top">' +
+          '<div><b>' + esc(d.name) + '</b> <span class="tag">' + esc(d.scenario) + '</span></div>' +
+          '<div class="lead-card-date">' + esc(date) + '</div>' +
+        '</div>' +
+        '<div class="lead-card-contact">' + esc(contact) + '</div>' +
+        '<div class="lead-card-row">' +
+          selectHtml +
+          '<input type="text" class="notes-input" data-id="' + esc(l.id) + '" value="' + esc(d.notes || '') + '" placeholder="нотатка...">' +
+          '<button class="save-btn" data-id="' + esc(l.id) + '" onclick="saveLead(' + esc(l.id) + ')">Зберегти</button>' +
+        '</div>' +
+      '</div>';
     });
-    leadsHtml += '</tbody></table>';
   }
   document.getElementById('leadsTableWrap').innerHTML = leadsHtml;
 
