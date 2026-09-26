@@ -692,7 +692,11 @@ function encodeFormData(data){
   return Object.keys(data).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]); }).join('&');
 }
 function trackEvent(eventName, detail){
-  // TODO: підключити до Supabase (analytics_events), коли буде готова база
+  fetch('/api/track-event', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({event: eventName, detail: detail || ''})
+  }).catch(function(){});
 }
 
 function openForm(source){

@@ -1,3 +1,6 @@
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 export default async function handler(req, res) {
   const password = req.query.password || req.headers["x-admin-password"];
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
@@ -6,17 +9,47 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "ADMIN_PASSWORD не налаштовано на сервері" });
     return;
   }
-
   if (!password || password !== ADMIN_PASSWORD) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
+  if (!SUPABASE_URL || !SERVICE_KEY) {
+    res.status(500).json({ error: "SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY не налаштовано на сервері" });
+    return;
+  }
 
-  // TODO: підключити Supabase (або іншу базу) — поки що заявки й події
-  // не зберігаються окремо від Telegram, тому список тут порожній.
-  res.status(200).json({
-    leads: [],
-    events: [],
-    note: "База даних ще не підключена — заявки йдуть тільки в Telegram. Підключи Supabase, щоб бачити список тут.",
-  });
+  try {
+    const headers = {
+      apikey: SERVICE_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+    };
+
+    const [leadsRes, eventsRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/leads?select=*&order=created_at.desc&limit=500`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/analytics_events?select=*&order=created_at.desc&limit=200`, { headers }),
+    ]);
+
+    const leadsRaw = await leadsRes.json();
+    const eventsRaw = await eventsRes.json();
+
+    if (!leadsRes.ok) {
+      res.status(502).json({ error: "Помилка читання leads", details: leadsRaw });
+      return;
+    }
+
+    // Приводимо до формату {created_at, data:{...}} як очікує admin.html
+    const leads = leadsRaw.map((l) => ({
+      id: l.id,
+      created_at: l.created_at,
+      data: { name: l.name, phone: l.phone, email: l.email, scenario: l.scenario, status: l.status, notes: l.notes },
+    }));
+    const events = eventsRaw.map((e) => ({
+      created_at: e.created_at,
+      data: { event: e.event, detail: e.detail },
+    }));
+
+    res.status(200).json({ leads, events });
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
 }

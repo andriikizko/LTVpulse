@@ -52,6 +52,14 @@ tr:last-child td{border-bottom:0}
 .bar-track{flex:1;background:var(--bg-alt);border-radius:8px;height:22px;overflow:hidden}
 .bar-fill{background:var(--y);height:100%;border-radius:8px}
 .bar-count{width:36px;flex:none;font-size:13px;font-weight:700;text-align:right}
+
+.status-select{height:36px;border-radius:8px;border:1px solid var(--border);padding:0 8px;font-size:13px;background:#fff}
+.notes-input{height:36px;width:160px;border-radius:8px;border:1px solid var(--border);padding:0 10px;font-size:13px}
+.save-btn{height:36px;padding:0 14px;border-radius:8px;border:0;background:var(--y);color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.save-btn:hover{background:var(--y-dark)}
+.save-btn:disabled{opacity:.6;cursor:default}
+table{overflow-x:auto;display:block;white-space:nowrap}
+thead,tbody{display:table;width:100%;table-layout:auto}
 </style>
 </head>
 <body>
@@ -162,11 +170,21 @@ function render(data){
   if(leads.length === 0){
     leadsHtml = '<div class="empty">Заявок поки немає</div>';
   } else {
-    leadsHtml = '<table><thead><tr><th>Дата</th><th>Ім’я</th><th>Телефон</th><th>Email</th><th>Сценарій</th></tr></thead><tbody>';
-    leads.slice().reverse().forEach(function(l){
+    leadsHtml = '<table><thead><tr><th>Дата</th><th>Ім’я</th><th>Телефон</th><th>Email</th><th>Сценарій</th><th>Статус</th><th>Нотатки</th><th></th></tr></thead><tbody>';
+    leads.forEach(function(l){
       var d = l.data || {};
       var date = l.created_at ? new Date(l.created_at).toLocaleString('uk-UA') : '—';
-      leadsHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.phone) + '</td><td>' + esc(d.email) + '</td><td><span class="tag">' + esc(d.scenario) + '</span></td></tr>';
+      var status = d.status || 'новий';
+      var statusOptions = ['новий','в роботі','призначено дзвінок','угода','відмова'];
+      var selectHtml = '<select class="status-select" data-id="' + esc(l.id) + '">';
+      statusOptions.forEach(function(s){
+        selectHtml += '<option value="' + esc(s) + '"' + (s === status ? ' selected' : '') + '>' + esc(s) + '</option>';
+      });
+      selectHtml += '</select>';
+      leadsHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.phone) + '</td><td>' + esc(d.email) + '</td><td><span class="tag">' + esc(d.scenario) + '</span></td>' +
+        '<td>' + selectHtml + '</td>' +
+        '<td><input type="text" class="notes-input" data-id="' + esc(l.id) + '" value="' + esc(d.notes || '') + '" placeholder="нотатка..."></td>' +
+        '<td><button class="save-btn" data-id="' + esc(l.id) + '" onclick="saveLead(' + esc(l.id) + ')">Зберегти</button></td></tr>';
     });
     leadsHtml += '</tbody></table>';
   }
@@ -200,7 +218,7 @@ function render(data){
     evHtml = '<div class="empty">Подій поки немає</div>';
   } else {
     evHtml = '<table><thead><tr><th>Дата</th><th>Подія</th><th>Деталі</th></tr></thead><tbody>';
-    events.slice().reverse().slice(0,50).forEach(function(e){
+    events.slice(0,50).forEach(function(e){
       var d = e.data || {};
       var date = e.created_at ? new Date(e.created_at).toLocaleString('uk-UA') : '—';
       evHtml += '<tr><td>' + esc(date) + '</td><td>' + esc(d.event) + '</td><td>' + esc(d.detail) + '</td></tr>';
@@ -208,6 +226,33 @@ function render(data){
     evHtml += '</tbody></table>';
   }
   document.getElementById('eventsTableWrap').innerHTML = evHtml;
+}
+
+function saveLead(id){
+  var statusEl = document.querySelector('.status-select[data-id="' + id + '"]');
+  var notesEl = document.querySelector('.notes-input[data-id="' + id + '"]');
+  var btn = document.querySelector('.save-btn[data-id="' + id + '"]');
+  var status = statusEl ? statusEl.value : '';
+  var notes = notesEl ? notesEl.value : '';
+
+  if(btn){ btn.textContent = '...'; btn.disabled = true; }
+
+  fetch('/api/update-lead', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ password: PWD, id: id, status: status, notes: notes })
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(btn){
+        btn.textContent = data.ok ? '✓ Збережено' : 'Помилка';
+        btn.disabled = false;
+        setTimeout(function(){ btn.textContent = 'Зберегти'; }, 1500);
+      }
+    })
+    .catch(function(){
+      if(btn){ btn.textContent = 'Помилка'; btn.disabled = false; }
+    });
 }
 
 document.getElementById('pwdInput').addEventListener('keydown', function(e){
