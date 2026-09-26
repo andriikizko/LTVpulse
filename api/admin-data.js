@@ -1,15 +1,13 @@
+import { checkAdminPassword } from "./_lib/auth.js";
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export default async function handler(req, res) {
   const password = req.query.password || req.headers["x-admin-password"];
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-  if (!ADMIN_PASSWORD) {
-    res.status(500).json({ error: "ADMIN_PASSWORD не налаштовано на сервері" });
-    return;
-  }
-  if (!password || password !== ADMIN_PASSWORD) {
+  const ok = await checkAdminPassword(password);
+  if (!ok) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }

@@ -70,6 +70,14 @@ tr:last-child td{border-bottom:0}
 .lead-card-contact{font-size:13px;color:var(--gray);margin-top:4px}
 .lead-card-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .lead-card-row .notes-input{flex:1;min-width:140px}
+
+.access-form{display:flex;gap:10px;flex-wrap:wrap}
+.access-form input{height:44px;border-radius:10px;border:1px solid var(--border);padding:0 14px;font-size:14px;flex:1;min-width:160px}
+.access-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.access-row:last-child{border-bottom:0}
+.access-row-label{flex:1;min-width:160px;font-size:14px}
+.save-btn.danger{background:#fff;color:#dc2626;border:1.5px solid #fecaca}
+.save-btn.danger:hover{background:#fef2f2}
 table{overflow-x:auto;display:block;white-space:nowrap}
 thead,tbody{display:table;width:100%;table-layout:auto}
 </style>
@@ -93,6 +101,7 @@ thead,tbody{display:table;width:100%;table-layout:auto}
     <div class="tabs">
       <button class="tab-btn active" id="tabBtnLeads" onclick="switchTab('leads')">Заявки</button>
       <button class="tab-btn" id="tabBtnAnalytics" onclick="switchTab('analytics')">Аналітика</button>
+      <button class="tab-btn" id="tabBtnAccess" onclick="switchTab('access')">Управління</button>
     </div>
 
     <div id="tabLeads" class="tab-panel">
@@ -133,6 +142,22 @@ thead,tbody{display:table;width:100%;table-layout:auto}
         <div id="eventsTableWrap"></div>
       </div>
     </div>
+
+    <div id="tabAccess" class="tab-panel" style="display:none">
+      <div class="card">
+        <div class="section-title">Додати новий доступ</div>
+        <div class="access-form">
+          <input type="text" id="newAccessLabel" placeholder="Назва (напр. Bartez)">
+          <input type="text" id="newAccessPassword" placeholder="Пароль">
+          <button class="save-btn" onclick="addAccess()">Додати</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Існуючі доступи</div>
+        <div id="accessListWrap"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -142,8 +167,11 @@ var PWD = sessionStorage.getItem('ltv_admin_pwd') || '';
 function switchTab(name){
   document.getElementById('tabLeads').style.display = name === 'leads' ? 'block' : 'none';
   document.getElementById('tabAnalytics').style.display = name === 'analytics' ? 'block' : 'none';
+  document.getElementById('tabAccess').style.display = name === 'access' ? 'block' : 'none';
   document.getElementById('tabBtnLeads').classList.toggle('active', name === 'leads');
   document.getElementById('tabBtnAnalytics').classList.toggle('active', name === 'analytics');
+  document.getElementById('tabBtnAccess').classList.toggle('active', name === 'access');
+  if(name === 'access') loadAccessList();
 }
 
 function login(){
@@ -401,6 +429,94 @@ function saveLead(id){
     })
     .catch(function(){
       if(btn){ btn.textContent = 'Помилка'; btn.disabled = false; }
+    });
+}
+
+function loadAccessList(){
+  fetch('/api/manage-access', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ password: PWD, action: 'list' })
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data.ok){
+        document.getElementById('accessListWrap').innerHTML = '<div class="empty" style="color:#dc2626">' + esc(data.error || 'Помилка') + '</div>';
+        return;
+      }
+      renderAccessList(data.access || []);
+    })
+    .catch(function(){
+      document.getElementById('accessListWrap').innerHTML = '<div class="empty" style="color:#dc2626">Помилка завантаження</div>';
+    });
+}
+
+function renderAccessList(list){
+  if(list.length === 0){
+    document.getElementById('accessListWrap').innerHTML = '<div class="empty">Доступів немає</div>';
+    return;
+  }
+  var html = '';
+  list.forEach(function(a){
+    var date = a.created_at ? new Date(a.created_at).toLocaleDateString('uk-UA') : '';
+    html += '<div class="access-row">' +
+      '<div class="access-row-label"><b>' + esc(a.label) + '</b><span class="lead-card-date"> · додано ' + esc(date) + '</span></div>' +
+      '<input type="text" class="notes-input access-new-pwd" data-id="' + esc(a.id) + '" placeholder="новий пароль">' +
+      '<button class="save-btn" onclick="updateAccess(' + esc(a.id) + ')">Змінити пароль</button>' +
+      '<button class="save-btn danger" onclick="deleteAccess(' + esc(a.id) + ')">Видалити</button>' +
+    '</div>';
+  });
+  document.getElementById('accessListWrap').innerHTML = html;
+}
+
+function addAccess(){
+  var label = document.getElementById('newAccessLabel').value.trim();
+  var newPassword = document.getElementById('newAccessPassword').value.trim();
+  if(!label || !newPassword){ alert('Заповни назву і пароль'); return; }
+  fetch('/api/manage-access', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ password: PWD, action: 'add', label: label, newPassword: newPassword })
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){
+        document.getElementById('newAccessLabel').value = '';
+        document.getElementById('newAccessPassword').value = '';
+        loadAccessList();
+      } else {
+        alert(data.error || 'Помилка');
+      }
+    });
+}
+
+function updateAccess(id){
+  var input = document.querySelector('.access-new-pwd[data-id="' + id + '"]');
+  var newPassword = input ? input.value.trim() : '';
+  if(!newPassword){ alert('Введи новий пароль'); return; }
+  fetch('/api/manage-access', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ password: PWD, action: 'update', id: id, newPassword: newPassword })
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){ input.value = ''; alert('Пароль змінено'); }
+      else alert(data.error || 'Помилка');
+    });
+}
+
+function deleteAccess(id){
+  if(!confirm('Видалити цей доступ?')) return;
+  fetch('/api/manage-access', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ password: PWD, action: 'delete', id: id })
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok) loadAccessList();
+      else alert(data.error || 'Помилка');
     });
 }
 
