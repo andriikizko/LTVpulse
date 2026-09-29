@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Маркетинг в умовах кризи — безкоштовний аудит | LTV Pulse</title>
+<meta name="description" content="Старі підходи до реклами більше не працюють. Проведемо аудит вашого маркетингу: нові аудиторії, адаптовані офери, гнучкі інструменти, багатоканальність.">
+<style>
+:root{
+  --y:#2563EB;
+  --y-dark:#1D4ED8;
+  --y-ondark:#5B9DFF;
+  --y-light:#EFF4FF;
+  --d:#0D0D0D;
+  --d2:#1a1a1a;
+  --gray:#6E6E6E;
+  --gray2:#8A8A8A;
+  --bg-alt:#F8F8F8;
+  --border:#e6e6e6;
+  --radius-lg:28px;
+  --radius-md:20px;
+  --radius-pill:999px;
+  --shadow:0 10px 30px rgba(13,13,13,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Inter",Arial,"Helvetica Neue",Helvetica,sans-serif;
+  color:var(--d2);
+  background:#fff;
+  -webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+img,svg{max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:88px 0}
+@media(max-width:768px){section{padding:36px 0}}
+
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-0.02em}
+h2{font-size:38px;line-height:1.15;color:var(--d)}
+h3{font-size:20px;color:var(--d)}
+p{margin:0;color:var(--gray);line-height:1.55}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--y-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+.section-head{max-width:680px;margin:0 auto 48px;text-align:center}
+.section-head p{margin-top:14px;font-size:17px}
+@media(max-width:768px){h2{font-size:28px}}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  height:56px;padding:0 30px;border-radius:var(--radius-pill);
+  background:var(--y);color:#fff;font-weight:700;font-size:14.5px;
+  border:0;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+  white-space:nowrap;
+}
+.btn:hover{background:var(--y-dark);transform:translateY(-1px);box-shadow:0 12px 24px rgba(37,99,235,.25)}
+.btn-outline{background:#fff;color:var(--d);border:1.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--y);color:var(--y-dark);background:#fff}
+.btn-sm{height:46px;padding:0 22px;font-size:14px}
+.btn-block{width:100%;white-space:normal}
+.card,.scn-card{min-width:0}
+
+/* header */
+header{
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding-top:env(safe-area-inset-top,0px);
+}
+.header-in{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1120px;margin:0 auto;gap:12px}
+.header-in .logo{flex:none}
+.header-right{display:flex;align-items:center;gap:18px;flex:none}
+.header-right .btn-sm{padding:0 16px;flex:none}
+@media(max-width:640px){.header-in{padding:12px 20px}}
+.logo{font-size:20px;font-weight:800;color:var(--d);letter-spacing:-0.02em;white-space:nowrap}
+.logo span{color:var(--y-dark)}
+.header-tel{font-weight:700;font-size:15px;color:var(--d)}
+.header-msg{font-size:14px;color:var(--gray);display:flex;align-items:center;gap:6px}
+@media(max-width:640px){.header-tel{display:none}}
+
+/* hero */
+.hero{padding:64px 0 40px;position:relative;overflow:hidden}
+.hero-bg{display:none}
+.hero-in{position:relative;z-index:1;display:flex;align-items:center;gap:56px}
+.hero-txt{flex:1 1 520px}
+.hero-txt h1{font-size:44px;line-height:1.08;font-weight:800;letter-spacing:-0.02em;color:var(--d);margin-bottom:14px}
+.hero-h2{font-size:24px;line-height:1.25;font-weight:700;letter-spacing:-0.01em;color:var(--d2);margin:0}
+.hero-eyebrow-bottom{margin-top:24px;font-size:13px;font-weight:700;color:var(--y-dark);text-transform:uppercase;letter-spacing:.06em}
+.hero-h2 em{font-style:normal;color:var(--y-dark)}
+.hero-sub{margin-top:22px;font-size:18px;max-width:480px}
+.hero-points{margin-top:22px;display:flex;flex-direction:column;gap:12px;max-width:480px}
+.hero-point{display:flex;gap:10px;align-items:flex-start;font-size:16px;color:var(--d2);line-height:1.4}
+.hero-point svg{flex:none;margin-top:2px}
+@media(max-width:640px){.hero-point{font-size:14.5px}}
+.hero-cta{margin-top:46px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hero-msg-link{font-size:14px;font-weight:600;color:var(--gray);display:flex;align-items:center;gap:8px}
+.trust-row{margin-top:36px;display:flex;gap:28px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--d)}
+.trust-dot{width:8px;height:8px;border-radius:50%;background:var(--y);flex:none}
+@media(max-width:991px){
+  .hero-in{flex-direction:column}
+  .hero-txt h1{font-size:36px}
+  .hero-h2{font-size:22px}
+  .hero-txt{max-width:none}
+}
+@media(max-width:640px){
+  .hero{padding:28px 0 24px;background:var(--bg-alt)}
+  .hero-bg{display:none}
+  .hero-txt{padding:26px 22px}
+  .hero-txt h1{font-size:28px;margin-bottom:10px}
+  .hero-h2{font-size:18px;line-height:1.3}
+  .hero-eyebrow-bottom{font-size:11px}
+  .trust-row{margin-top:16px !important;gap:8px !important}
+  .trust-item{font-size:13px}
+  .hero-cta{margin-top:34px;gap:10px}
+  .hero-cta .btn{height:48px;padding:0 22px;font-size:14px}
+  .hero-msg-link{font-size:13px}
+  .mockup{display:none}
+  .mockup-mobile{display:flex;margin-top:24px}
+}
+
+/* mockup */
+.mockup{flex:1 1 480px;background:var(--bg-alt);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow)}
+.mockup-top{display:flex;gap:8px;margin-bottom:16px}
+.mockup-dot{width:11px;height:11px;border-radius:50%;background:#e0e0e0}
+.mockup-card{background:#fff;border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow)}
+.mockup-kpis{display:flex;gap:12px;margin-bottom:22px}
+.kpi{flex:1;background:var(--y-light);border-radius:14px;padding:14px 10px;text-align:center}
+.kpi-num{display:block;font-size:20px;font-weight:800;color:var(--d)}
+.kpi-label{display:block;font-size:11px;color:var(--gray);margin-top:3px}
+.mockup-chart-row{display:flex;align-items:center;gap:22px}
+.donut{width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--y) calc(var(--p)*1%), #EFF4FF 0);display:flex;align-items:center;justify-content:center;flex:none}
+.donut span{width:66%;height:66%;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--d);font-size:16px}
+.mockup-bars{flex:1;display:flex;align-items:flex-end;gap:8px;height:90px}
+.mockup-bars i{flex:1;background:var(--y);border-radius:8px 8px 0 0;opacity:.85}
+
+.mockup-mobile{display:none;gap:10px;margin-top:24px}
+.mockup-mobile .kpi{padding:12px 6px}
+.mockup-mobile .kpi-num{font-size:17px}
+.mockup-mobile .kpi-label{font-size:10px}
+
+/* cards grid */
+.grid{display:grid;gap:22px}
+.grid-2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:minmax(0,1fr)}}
+
+.card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--y);border-radius:var(--radius-lg);padding:30px;box-shadow:var(--shadow)}
+.card h3{margin-bottom:10px}
+.card p{font-size:15px}
+.card-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--y-light);color:var(--y-dark);font-weight:800;font-size:15px;margin-bottom:16px}
+
+.alt{background:var(--bg-alt)}
+
+/* pain diagnostics */
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
+@media(max-width:768px){.pain-grid{grid-template-columns:1fr}}
+.pain-q{background:#fff;border:1px solid var(--border);border-left:4px solid var(--y);border-radius:var(--radius-md);padding:22px 24px;font-size:16px;font-weight:600;color:var(--d);display:flex;gap:14px;align-items:flex-start}
+.pain-q .q-mark{color:var(--y-dark);font-weight:800;font-size:20px;flex:none}
+.pain-conclusion{margin-top:28px;text-align:center;background:var(--d);color:#fff;border-radius:var(--radius-lg);padding:34px 30px}
+.pain-conclusion p{color:#e8e8e8;font-size:17px;max-width:560px;margin:0 auto}
+.pain-conclusion mark{background:var(--y);color:#fff;padding:1px 10px;border-radius:7px;font-weight:800;font-style:normal}
+
+/* mini test */
+.test-box{margin-top:40px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:34px;box-shadow:var(--shadow)}
+.test-box h3{font-size:18px;margin-bottom:4px}
+.test-hint{font-size:13px;color:var(--gray2);margin-bottom:22px}
+.test-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--d)}
+.test-item:last-of-type{border-bottom:0}
+.test-item input{width:20px;height:20px;accent-color:var(--y);flex:none}
+.test-result{display:none;margin-top:22px;padding:20px 22px;border-radius:var(--radius-md);background:var(--y-light);color:var(--d);font-size:15px;font-weight:600}
+.test-result.show{display:block}
+
+/* scenarios */
+.scn-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--y);border-radius:var(--radius-lg);padding:34px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px}
+.scn-tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--y-dark);background:var(--y-light);padding:6px 14px;border-radius:var(--radius-pill);width:fit-content}
+.scn-card h3{font-size:22px}
+.scn-card p{font-size:15px;flex:1}
+
+/* approach */
+.approach-in{display:flex;gap:48px;align-items:center}
+.approach-in .card{flex:1}
+@media(max-width:900px){.approach-in{flex-direction:column}}
+.step-num{font-size:34px;font-weight:800;color:var(--y-light);color:var(--y);opacity:.35;line-height:1}
+
+/* steps timeline */
+.steps{display:flex;flex-direction:column;gap:0;margin-top:10px}
+.step{display:flex;gap:24px;padding:26px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:0}
+.step-badge{flex:none;width:48px;height:48px;border-radius:50%;background:var(--y);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:17px}
+.step-body h3{margin-bottom:6px;font-size:17px}
+.step-body p{font-size:14.5px}
+.step-time{font-size:12px;font-weight:700;color:var(--y-dark);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;display:block}
+
+/* pricing */
+.price-box{display:flex;gap:40px;align-items:flex-start}
+@media(max-width:900px){.price-box{flex-direction:column}}
+.price-factors{flex:1}
+.price-factors ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}
+.price-factors li{display:flex;gap:12px;font-size:15.5px;color:var(--d);align-items:flex-start}
+.price-factors li:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--y);margin-top:8px;flex:none}
+.price-card{flex:0 0 360px;background:var(--d);color:#fff;border-radius:var(--radius-lg);padding:36px;text-align:center}
+.price-card p{color:#c9c9c9;font-size:14px;margin-bottom:24px}
+.price-card h3{color:#fff;font-size:22px;margin-bottom:10px}
+@media(max-width:900px){.price-card{flex:1;width:100%}}
+
+/* faq */
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;text-align:left;background:none;border:0;padding:22px 0;font-size:17px;font-weight:700;color:var(--d);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q .plus{flex:none;font-size:22px;color:var(--y-dark);transition:transform .2s}
+.faq-item.open .plus{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+.faq-a p{padding-bottom:20px;font-size:15px}
+.faq-item.open .faq-a{max-height:220px}
+
+/* form */
+.form-section{background:var(--d);color:#fff;border-radius:var(--radius-lg);padding:56px;position:relative;overflow:hidden}
+.form-section .section-head h2{color:#fff}
+.form-section .section-head p{color:#c9c9c9}
+.form-grid{max-width:520px;margin:0 auto}
+.form-row{margin-bottom:16px;position:relative}
+.form-row label{display:block;font-size:13px;font-weight:600;color:#c9c9c9;margin-bottom:8px}
+.form-row input{
+  width:100%;height:52px;border-radius:var(--radius-pill);border:1.5px solid #333;
+  background:#161616;color:#fff;padding:0 22px;font-size:15px;font-family:inherit;outline:none;
+}
+.form-row input::placeholder{color:#777}
+.form-row input:focus{border-color:var(--y)}
+.form-risk{margin-top:20px;font-size:13px;color:#aaa;line-height:1.5}
+.form-risk b{color:#fff}
+@media(max-width:640px){.form-section{padding:34px 22px}}
+
+/* кастомний dropdown замість нативного select */
+.custom-select{position:relative;width:100%}
+.custom-select-trigger{
+  width:100%;height:52px;border-radius:var(--radius-pill);border:1.5px solid #333;
+  background:#161616;color:#fff;padding:0 22px;font-size:15px;font-family:inherit;
+  display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;
+}
+.custom-select-trigger:hover,.custom-select.open .custom-select-trigger{border-color:var(--y)}
+.custom-select-arrow{color:#777;font-size:12px;flex:none;margin-left:8px;transition:transform .2s}
+.custom-select.open .custom-select-arrow{transform:rotate(180deg)}
+.custom-select-options{
+  display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;
+  background:#1c1c1c;border:1.5px solid #333;border-radius:16px;overflow:hidden;
+  box-shadow:0 16px 32px rgba(0,0,0,.35);
+}
+.custom-select.open .custom-select-options{display:block}
+.custom-select-option{padding:13px 20px;font-size:14px;color:#eee;cursor:pointer;line-height:1.4}
+.custom-select-option:hover{background:rgba(255,255,255,.06);color:var(--y-ondark)}
+.custom-select-option + .custom-select-option{border-top:1px solid #2b2b2b}
+
+/* footer */
+footer{padding:44px 0;border-top:1px solid var(--border)}
+.footer-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+
+/* Policy modal */
+.policy-overlay{display:none;position:fixed;inset:0;background:rgba(13,13,13,.55);z-index:100;padding:24px;overflow-y:auto}
+.policy-overlay.open{display:flex;align-items:flex-start;justify-content:center}
+.policy-modal{background:#fff;border-radius:var(--radius-lg);padding:34px;max-width:640px;width:100%;position:relative;margin:40px 0;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.form-modal{background:var(--d);max-width:520px}
+.form-modal .policy-close{background:#1c1c1c;border-color:#333;color:#999}
+.form-modal .policy-close:hover{border-color:var(--y);color:var(--y)}
+.form-modal .section-head p{color:#c9c9c9}
+.form-modal .thankyou{padding:10px 0}
+.policy-close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:#fff;font-size:20px;line-height:1;cursor:pointer;color:var(--gray)}
+.policy-close:hover{border-color:var(--y);color:var(--y)}
+.policy-body p{margin-bottom:16px;font-size:14.5px;line-height:1.6;color:var(--d2)}
+.policy-body b{color:var(--d)}
+
+/* Thank-you state */
+.thankyou{display:none;text-align:center;padding:20px 0}
+.thankyou.show{display:block}
+.thankyou-icon{width:64px;height:64px;border-radius:50%;background:var(--y);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.thankyou h3{color:#fff;font-size:22px;margin-bottom:10px}
+.thankyou p{color:#c9c9c9;font-size:15px;margin-bottom:26px}
+.thankyou .btn{width:100%;margin-bottom:12px}
+.footer-in p{font-size:13px;color:var(--gray2)}
+
+/* дотсітка на alt-секціях */
+.alt{background-image:radial-gradient(circle,#e4e4e4 1px,transparent 1px);background-size:22px 22px;background-position:0 0;background-color:var(--bg-alt)}
+
+/* scroll-reveal */
+.card,.scn-card,.step,.faq-item,.pain-q,.section-head,.pain-conclusion,.test-box,.price-box,.form-section{
+  opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;
+}
+.card.in-view,.scn-card.in-view,.step.in-view,.faq-item.in-view,.pain-q.in-view,.section-head.in-view,.pain-conclusion.in-view,.test-box.in-view,.price-box.in-view,.form-section.in-view{
+  opacity:1;transform:none;
+}
+@media(prefers-reduced-motion:reduce){
+  .card,.scn-card,.step,.faq-item,.pain-q,.section-head,.pain-conclusion,.test-box,.price-box,.form-section{opacity:1;transform:none;transition:none}
+}
+
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero-txt{animation:heroIn .8s ease both}
+.mockup{animation:heroIn .8s ease .15s both}
+.mockup-mobile{animation:heroIn .8s ease .15s both}
+
+@keyframes btnPulse{
+  0%,80%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.45)}
+  90%{box-shadow:0 0 0 12px rgba(37,99,235,0)}
+}
+.btn-pulse{animation:btnPulse 3s ease-out infinite}
+@media(prefers-reduced-motion:reduce){.btn-pulse{animation:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <div class="logo">LTV <span>Pulse</span></div>
+    <div class="header-right">
+      <a class="btn btn-sm" href="#" onclick="openForm('header');return false;">Отримати аудит маркетингу</a>
+    </div>
+  </div>
+</header>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="wrap hero-in">
+    <div class="hero-txt">
+      <h1>Маркетинг в умовах кризи</h1>
+      <h2 class="hero-h2">Старі підходи більше <em>не приносять клієнтів</em> — і продовжувати ними користуватись небезпечно для бізнесу</h2>
+      <div class="hero-points">
+        <div class="hero-point"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="var(--y-light)"/><path d="M8 12.5l2.5 2.5L16 9" stroke="var(--y-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Знайдемо нові аудиторії замість вигорілих, які вже не реагують на рекламу.</span></div>
+        <div class="hero-point"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="var(--y-light)"/><path d="M8 12.5l2.5 2.5L16 9" stroke="var(--y-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Адаптуємо офер під реалії сьогодення в Україні, а не під докризовий ринок.</span></div>
+        <div class="hero-point"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="var(--y-light)"/><path d="M8 12.5l2.5 2.5L16 9" stroke="var(--y-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Побудуємо гнучку багатоканальну систему, яка не залежить від одного каналу трафіку.</span></div>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-pulse" href="#" onclick="openForm('hero');return false;">Отримати безкоштовний аудит маркетингу</a>
+        <a class="hero-msg-link" href="#form"><svg width="16" height="16" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"><circle cx="120" cy="120" r="120" fill="#29A9EB"/><path d="M54 122.5c40-17.5 66.7-29 80-34.5 38-15.8 45.9-18.6 51-18.7 1.1 0 3.6.3 5.3 1.6 1.4 1.1 1.8 2.6 2 3.7.2 1.1.4 3.5.2 5.4-2 21.5-10.9 73.6-15.4 97.7-1.9 10.2-5.7 13.6-9.3 14-8 .7-14 -5.3-21.7 -10.4 -12.1-7.9-18.9-12.8-30.6-20.5-13.6-8.9-4.8-13.8 3-21.8 2-2.1 37-33.9 37.7-36.8.1-.4.2-1.7-.6-2.4-.8-.7-2-.5-2.9-.3-1.2.3-20.9 13.3-58.9 39-5.6 3.8-10.6 5.7-15.2 5.6-5-.1-14.6-2.8-21.8-5.2-8.8-2.9-15.8-4.4-15.2-9.4.3-2.6 3.8-5.2 10.4-7.9z" fill="#fff"/></svg> Обговорити ситуацію в Telegram →</a>
+      </div>
+      <div class="hero-eyebrow-bottom">Аудит та перезапуск маркетингу для бізнесу в Україні</div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-top"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div>
+      <div class="mockup-card">
+        <div class="mockup-kpis">
+          <div class="kpi"><span class="kpi-num">4</span><span class="kpi-label">нових канали трафіку</span></div>
+          <div class="kpi"><span class="kpi-num">-32%</span><span class="kpi-label">вартість ліда</span></div>
+          <div class="kpi"><span class="kpi-num">×2.1</span><span class="kpi-label">ROMI на нових аудиторіях</span></div>
+        </div>
+        <div class="mockup-chart-row">
+          <div class="donut" style="--p:62"><span>62%</span></div>
+          <div class="mockup-bars">
+            <i style="height:35%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:85%"></i><i style="height:65%"></i><i style="height:95%"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-mobile">
+      <div class="kpi"><span class="kpi-num">4</span><span class="kpi-label">канали</span></div>
+      <div class="kpi"><span class="kpi-num">-32%</span><span class="kpi-label">вартість ліда</span></div>
+      <div class="kpi"><span class="kpi-num">×2.1</span><span class="kpi-label">ROMI</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 1.5 4 СТОВПИ -->
+<section>
+  <div class="wrap">
+    <div class="grid grid-4">
+      <div class="card">
+        <div class="card-num"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Нові аудиторії</h3>
+        <p>Стара база вигоріла — знаходимо сегменти, які ще не бачили вашу рекламу і реагують на неї.</p>
+      </div>
+      <div class="card">
+        <div class="card-num"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.2 3.4 9.9 8 11 4.6-1.1 8-5.8 8-11V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-4"/></svg></div>
+        <h3>Адаптовані офери</h3>
+        <p>Переписуємо пропозицію під реалії сьогодення в Україні — під те, чим людина живе зараз, а не рік тому.</p>
+      </div>
+      <div class="card">
+        <div class="card-num"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11 13 15 21 7"/><path d="M15 7h6v6"/></svg></div>
+        <h3>Гнучкі інструменти</h3>
+        <p>Замінюємо жорсткі довгі кампанії на інструменти, які можна швидко змінити під нову ситуацію без втрати бюджету.</p>
+      </div>
+      <div class="card">
+        <div class="card-num"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <h3>Багатоканальність</h3>
+        <p>Розподіляємо трафік по кількох каналах одразу, щоб відключення чи подорожчання одного не зупиняло продажі.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ПРОБЛЕМА / ДІАГНОСТИКА -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Чому старі підходи не працюють</div>
+      <h2>Скільки бюджету ви зараз спалюєте на маркетинг, який більше не окупається?</h2>
+      <p>Ринок змінився: аудиторія, канали, ціни на рекламу і те, на що люди зараз готові витрачати гроші. Якщо стратегія не змінювалась услід за ринком, дайте відповідь на 4 запитання:</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-q"><span class="q-mark">?</span><span><b>Вартість ліда:</b> наскільки зросла ціна заявки за останній рік і чи є план, що з цим робити, крім «збільшити бюджет»?</span></div>
+      <div class="pain-q"><span class="q-mark">?</span><span><b>Один канал:</b> чи впаде виторг компанії, якщо завтра подорожчає або зникне ваше основне джерело трафіку?</span></div>
+      <div class="pain-q"><span class="q-mark">?</span><span><b>Старий офер:</b> коли востаннє пропозиція для клієнта переписувалась під поточну ситуацію, а не просто під нову картинку?</span></div>
+      <div class="pain-q"><span class="q-mark">?</span><span><b>Вигоріла аудиторія:</b> чи показуєте ви рекламу тим самим людям, що й рік тому, замість пошуку нових сегментів?</span></div>
+    </div>
+    <div class="pain-conclusion">
+      <p>Якщо на більшість питань відповідь «не знаю» або «так само, як завжди» — <mark>ваш маркетинг працює за докризовими правилами на кризовому ринку</mark>. Аудит показує, де саме витікає бюджет, за 3–5 днів.</p>
+    </div>
+
+    <div class="test-box">
+      <h3>Тест: чи потребує ваш маркетинг термінового перезапуску?</h3>
+      <p class="test-hint">Позначте пункти, які відповідають поточній ситуації у вашій компанії (займає 30 секунд).</p>
+      <div id="testItems">
+        <label class="test-item"><input type="checkbox" data-scenario="none" data-risk="реклама йде в один канал і повністю залежить від його ціни" data-insight="Весь маркетинг тримається на одному каналі — його подорожчання чи блокування зупиняє продажі повністю"> Реклама йде переважно в одному каналі (тільки Meta, тільки Google або тільки один месенджер)</label>
+        <label class="test-item"><input type="checkbox" data-scenario="have" data-risk="офер не оновлювався і вже не відповідає поточним болям клієнта" data-insight="Пропозиція для клієнта не змінювалась більше року — вона говорить про докризові пріоритети, а не про сьогодення"> Текст реклами й пропозиція для клієнта не змінювались понад рік</label>
+        <label class="test-item"><input type="checkbox" data-scenario="" data-risk="аудиторія та креативи не оновлювались, звідси зростання ціни ліда" data-insight="Реклама показується тим самим людям роками — звідси й зростання ціни ліда, яке спишуть на «ринок подорожчав»"> Цільова аудиторія й креативи не переглядались останні 6+ місяців</label>
+        <label class="test-item"><input type="checkbox" data-scenario="" data-risk="немає системи швидкої зміни каналів чи бюджетів під нову ситуацію" data-insight="Немає плану «якщо канал X перестане працювати завтра» — рішення приймаються по факту падіння продажів"> Немає плану дій, якщо ключовий канал реклами раптово перестане працювати чи подорожчає вдвічі</label>
+        <label class="test-item"><input type="checkbox" data-scenario="have" data-risk="вартість ліда зростає, а причину ніхто не аналізував системно" data-insight="Вартість ліда зростає кілька місяців поспіль, але причину так ніхто й не розбирав по цифрах"> Вартість заявки зростає останні кілька місяців, але причину ніхто детально не аналізував</label>
+      </div>
+      <div id="testResult" class="test-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ДВА СЦЕНАРІЇ -->
+<section id="scenarios">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Індивідуальний підхід</div>
+      <h2>Оберіть поточний стан вашого маркетингу</h2>
+      <p>Будуємо систему, яка не залежить від одного каналу, одного офера чи однієї аудиторії — і швидко адаптується під зміни ринку.</p>
+    </div>
+    <div class="grid grid-2">
+      <div class="scn-card">
+        <span class="scn-tag">Реклама більше не окупається</span>
+        <h3>Аудит і перезапуск поточного маркетингу</h3>
+        <p>Розбираємо, чому подорожчав лід і впала конверсія: аудиторія, офер, канали, креативи. Даємо конкретний план, що змінити першим, а що — другим.</p>
+        <a class="btn btn-block" href="#" onclick="setScenario('Реклама не окупається');openForm('scenario_none');return false;">Отримати аудит поточного маркетингу</a>
+      </div>
+      <div class="scn-card">
+        <span class="scn-tag">Хочу нові канали й аудиторії</span>
+        <h3>Пошук нових аудиторій і побудова багатоканальності</h3>
+        <p>Знаходимо сегменти, які ще не вигоріли, тестуємо нові канали й офери, будуємо систему, стійку до зростання цін у будь-якому одному каналі.</p>
+        <a class="btn btn-block" href="#" onclick="setScenario('Нові аудиторії та канали');openForm('scenario_have');return false;">Знайти нові канали й аудиторії</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ПІДХІД -->
+<section class="alt">
+  <div class="wrap approach-in">
+    <div class="hero-txt" style="flex:1">
+      <div class="eyebrow">Методологія LTV Pulse</div>
+      <h2>Чому «просто збільшити бюджет» більше не рятує</h2>
+      <p class="hero-sub">Більшість компаній реагують на кризу одним способом — збільшують бюджет на той самий канал з тим самим офером. Це прискорює вигорання аудиторії й ще більше піднімає ціну ліда. Наш підхід — <b>«спочатку діагностика ринку, потім бюджет»</b>: спершу знаходимо, де саме втрачається ефективність, і лише потім масштабуємо те, що реально працює.</p>
+    </div>
+    <div class="grid grid-2" style="flex:1">
+      <div class="card"><div class="card-num">1</div><h3>Діагностика поточного стану</h3><p>Розбираємо аудиторію, офер, канали й креативи окремо, щоб знайти, що саме вже не працює, а не лікувати симптоми.</p></div>
+      <div class="card"><div class="card-num">2</div><h3>Гнучка багатоканальна система</h3><p>Розподіляємо ставки на кілька каналів і аудиторій одразу, щоб бізнес не залежав від одного джерела трафіку.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ЩО ПОКАЖЕ АУДИТ -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Результат для бізнесу</div>
+      <h2>Що ви отримаєте після аудиту маркетингу</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><h3>Причини зростання ціни ліда</h3><p>Точна відповідь, чому подорожчала заявка: аудиторія, офер, канал чи креативи — а не «ринок такий».</p></div>
+      <div class="card"><h3>Список нових аудиторій</h3><p>Конкретні сегменти, які ще не бачили вашу рекламу і з високою ймовірністю відреагують на неї.</p></div>
+      <div class="card"><h3>Адаптований офер</h3><p>Пропозиція, переписана під те, чим клієнт живе зараз, а не під докризовий ринок.</p></div>
+      <div class="card"><h3>Карта каналів</h3><p>Які канали варто підключити чи посилити, щоб бізнес не залежав від одного джерела трафіку.</p></div>
+      <div class="card"><h3>План гнучкого бюджету</h3><p>Як швидко перекидати бюджет між каналами, якщо один із них раптово подорожчає чи перестане працювати.</p></div>
+      <div class="card"><h3>Пріоритетність дій</h3><p>Що зробити цього тижня, а що — у наступному місяці, з орієнтовним ефектом кожного кроку.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. ЯК МИ ПРАЦЮЄМО -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Процес роботи</div>
+      <h2>Від аудиту до працюючої багатоканальної системи</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-badge">1</div><div class="step-body"><span class="step-time">День 1–2</span><h3>Аудит поточного маркетингу</h3><p>Аналізуємо канали, аудиторії, офер, креативи й реальну вартість ліда за останні місяці.</p></div></div>
+      <div class="step"><div class="step-badge">2</div><div class="step-body"><span class="step-time">День 3</span><h3>Пошук нових аудиторій</h3><p>Формуємо гіпотези нових сегментів, які ще не вигоріли й відповідають поточному попиту.</p></div></div>
+      <div class="step"><div class="step-badge">3</div><div class="step-body"><span class="step-time">День 4–5</span><h3>Адаптація офера</h3><p>Переписуємо пропозицію під реалії сьогодення — під те, що зараз важливо клієнту.</p></div></div>
+      <div class="step"><div class="step-badge">4</div><div class="step-body"><span class="step-time">Тиждень 2</span><h3>Побудова багатоканальності</h3><p>Розподіляємо тестові бюджети на кілька каналів одночасно замість одного великого.</p></div></div>
+      <div class="step"><div class="step-badge">5</div><div class="step-body"><span class="step-time">Тиждень 2–3</span><h3>Запуск і перші результати</h3><p>Запускаємо нові аудиторії та офери, порівнюємо вартість ліда з попередніми показниками.</p></div></div>
+      <div class="step"><div class="step-badge">6</div><div class="step-body"><span class="step-time">Пост-запуск</span><h3>Гнучке масштабування</h3><p>Посилюємо канали й аудиторії, що показали результат, і формуємо план дій на випадок нових змін ринку.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. ЦІНА -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Прозоро про аудит</div>
+      <h2>Аудит маркетингу — безкоштовно</h2>
+    </div>
+    <div class="price-box">
+      <div class="price-factors">
+        <ul>
+          <li>Розбираємо ваші поточні канали, офер і аудиторію без зобов'язань з вашого боку</li>
+          <li>Показуємо, де саме витікає бюджет і чому зросла вартість ліда</li>
+          <li>Даємо 2–3 конкретні нові аудиторії або канали, які варто протестувати</li>
+          <li>Подальша робота над перезапуском — окремо, за розрахунком під ваш кейс</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <h3>Безкоштовний аудит маркетингу</h3>
+        <p>Без шаблонів. Дивимось саме на ваші канали, цифри й аудиторію — і показуємо конкретні точки росту.</p>
+        <a class="btn btn-block" href="#" onclick="openForm('price');return false;">Отримати безкоштовний аудит</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. FAQ -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Відповіді на питання</div>
+      <h2>Все, що варто знати про аудит маркетингу</h2>
+    </div>
+    <div style="max-width:760px;margin:0 auto" id="faq">
+      <div class="faq-item">
+        <button class="faq-q">Чому просто збільшити рекламний бюджет — це не рішення?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Якщо аудиторія вигоріла, а офер застарів, більший бюджет лише швидше піднімає ціну ліда на тому самому каналі. Спочатку потрібно знайти нові аудиторії й оновити пропозицію — і лише тоді масштабувати бюджет.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">У нас уже є маркетолог або підрядник. Навіщо ще й аудит?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Аудит — це незалежний погляд на цифри й процеси ззовні. Він показує сліпі зони, які складно побачити зсередини, і дає план дій, з яким ваш маркетолог чи підрядник може працювати далі.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Скільки часу займає аудит?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Базовий аудит займає 3–5 робочих днів після отримання доступу до рекламних кабінетів і аналітики.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Що потрібно від нас для проведення аудиту?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Доступ до рекламних кабінетів (Meta, Google тощо) на перегляд, коротка розмова про бізнес і поточні цілі. Без складної підготовки з вашого боку.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Чи справді аудит безкоштовний, без прихованих умов?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Так. Аудит — це діагностика поточної ситуації, яка нічого не коштує і ні до чого не зобов'язує. Подальша робота над перезапуском обговорюється окремо, тільки якщо вам це підійде.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Ви працюєте тільки з великим бюджетом на рекламу?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Ні. Підхід «нові аудиторії, адаптований офер, гнучкі інструменти, багатоканальність» працює і при невеликих бюджетах — часто саме тут ефект помітний найшвидше.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Що робити, якщо за результатами аудиту виявиться, що все й так добре?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Скажемо про це прямо. Якщо серйозних точок росту немає — краще чесно повідомити, ніж штучно створювати роботу.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. ФОРМА (тригер попапу) -->
+<section id="form">
+  <div class="wrap">
+    <div class="form-section" style="text-align:center">
+      <div class="section-head">
+        <div class="eyebrow" style="color:var(--y-ondark)">Готові дізнатись, де витікає бюджет?</div>
+        <h2>Отримайте безкоштовний аудит вашого маркетингу</h2>
+        <p>Коротка форма — зв'яжемося протягом робочого дня й домовимось про доступ до кабінетів.</p>
+      </div>
+      <button class="btn" onclick="openForm('form_section')">Отримати безкоштовний аудит</button>
+    </div>
+  </div>
+</section>
+
+<!-- Попап: форма заявки -->
+<div id="formOverlay" class="policy-overlay">
+  <div class="policy-modal form-modal">
+    <button class="policy-close" onclick="closeForm()">×</button>
+    <div id="formModalBody">
+      <div class="section-head" style="text-align:left;margin-bottom:24px">
+        <div class="eyebrow" style="color:var(--y-dark)">Безкоштовний аудит маркетингу</div>
+        <h2 style="font-size:26px">Отримайте аудит і план дій</h2>
+        <p>Заповніть коротку форму — зв'яжемося протягом робочого дня.</p>
+      </div>
+      <form class="form-grid" id="leadForm" onsubmit="submitLead(event)" style="max-width:none">
+        <div class="form-row">
+          <label>Ім'я</label>
+          <input type="text" id="leadName" name="name" placeholder="Як до вас звертатися?" required>
+        </div>
+        <div class="form-row">
+          <label>Телефон або Telegram</label>
+          <input type="text" id="leadPhone" name="phone" placeholder="+380... або @username" required>
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" id="leadEmail" name="email" placeholder="пошта@example.com">
+        </div>
+        <div class="form-row">
+          <label>Ваша ситуація</label>
+          <div class="custom-select" id="scenarioCustom">
+            <button type="button" class="custom-select-trigger" id="scenarioTrigger" onclick="toggleScenarioDropdown()">Оберіть варіант зі списку <span class="custom-select-arrow">▾</span></button>
+            <div class="custom-select-options" id="scenarioOptions">
+              <div class="custom-select-option" onclick="pickScenario('','Оберіть варіант зі списку')">Оберіть варіант зі списку</div>
+              <div class="custom-select-option" onclick="pickScenario('Реклама не окупається','Реклама подорожчала і не окупається')">Реклама подорожчала і не окупається</div>
+              <div class="custom-select-option" onclick="pickScenario('Нові аудиторії та канали','Хочу нові аудиторії та канали')">Хочу нові аудиторії та канали</div>
+              <div class="custom-select-option" onclick="pickScenario('Інше','Потрібна консультація / інше')">Потрібна консультація / інше</div>
+            </div>
+          </div>
+          <input type="hidden" id="scenarioSelect" value="">
+        </div>
+        <button class="btn btn-block" type="submit">Отримати безкоштовний аудит</button>
+        <div class="form-risk"><b>Гарантія прозорості:</b> аудит маркетингу безкоштовний і не зобов'язує вас до подальшої співпраці.</div>
+      </form>
+      <div class="thankyou" id="thankyou">
+        <div class="thankyou-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>Дякуємо! Ваша заявка надіслана</h3>
+        <p>Ми зв'яжемося з вами протягом робочого дня. А поки — приєднуйтесь до нашого Telegram-каналу: кейси, поради з маркетингу та систематизації продажів.</p>
+        <a class="btn" href="https://t.me/ltvpulse" target="_blank" rel="noopener">Підписатися на Telegram-канал</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap footer-in">
+    <div class="logo">LTV <span>Pulse</span></div>
+    <p>LTV Pulse — аудит і перезапуск маркетингу для бізнесу в Україні.<br><span style="font-size:12px">© 2026 LTV Pulse. Усі права захищено. · <a href="#" onclick="openPolicy();return false;" style="color:inherit;text-decoration:underline">Політика конфіденційності</a></span></p>
+    <a class="header-msg" href="#form"><svg width="18" height="18" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"><circle cx="120" cy="120" r="120" fill="#29A9EB"/><path d="M54 122.5c40-17.5 66.7-29 80-34.5 38-15.8 45.9-18.6 51-18.7 1.1 0 3.6.3 5.3 1.6 1.4 1.1 1.8 2.6 2 3.7.2 1.1.4 3.5.2 5.4-2 21.5-10.9 73.6-15.4 97.7-1.9 10.2-5.7 13.6-9.3 14-8 .7-14 -5.3-21.7 -10.4 -12.1-7.9-18.9-12.8-30.6-20.5-13.6-8.9-4.8-13.8 3-21.8 2-2.1 37-33.9 37.7-36.8.1-.4.2-1.7-.6-2.4-.8-.7-2-.5-2.9-.3-1.2.3-20.9 13.3-58.9 39-5.6 3.8-10.6 5.7-15.2 5.6-5-.1-14.6-2.8-21.8-5.2-8.8-2.9-15.8-4.4-15.2-9.4.3-2.6 3.8-5.2 10.4-7.9z" fill="#fff"/></svg> Написати експерту в Telegram</a>
+  </div>
+</footer>
+
+<!-- Модалка: Політика конфіденційності -->
+<div id="policyOverlay" class="policy-overlay">
+  <div class="policy-modal">
+    <button class="policy-close" onclick="closePolicy()">×</button>
+    <h2 style="margin-bottom:18px">Політика конфіденційності</h2>
+    <div class="policy-body">
+      <p><b>1. Загальні положення</b><br>Ця Політика конфіденційності описує, як власник цього сайту (далі — «Власник сайту») збирає, використовує та захищає персональні дані відвідувачів і користувачів сайту LTV Pulse. Використовуючи сайт, ви погоджуєтесь з умовами цієї Політики.</p>
+      <p><b>2. Які дані збираються</b><br>Власник сайту може збирати: ім'я, номер телефону або нік у Telegram, іншу інформацію, яку ви добровільно вказуєте у формі заявки на сайті, а також технічні дані (тип пристрою, браузер, IP-адреса) для аналітики роботи сайту.</p>
+      <p><b>3. Мета обробки даних</b><br>Дані використовуються виключно для: зв'язку з вами щодо заявки, підготовки аудиту чи комерційної пропозиції, покращення роботи сайту. Дані не передаються третім особам, крім випадків, передбачених законодавством.</p>
+      <p><b>4. Зберігання даних</b><br>Дані зберігаються протягом строку, необхідного для досягнення мети їх обробки, або до моменту, коли ви попросите їх видалити.</p>
+      <p><b>5. Файли cookie</b><br>Сайт може використовувати технічні файли cookie для коректної роботи форм та аналітики відвідуваності. Ви можете відключити cookie в налаштуваннях браузера.</p>
+      <p><b>6. Права користувача</b><br>Ви маєте право запитати у Власника сайту інформацію про те, які дані про вас зберігаються, вимагати їх виправлення або видалення — звернувшись через контакти, вказані на сайті.</p>
+      <p><b>7. Зміни до Політики</b><br>Власник сайту може оновлювати цю Політику. Актуальна версія завжди доступна на цій сторінці.</p>
+      <p style="color:var(--gray2);font-size:13px">Останнє оновлення: 2026 рік.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function getVisitorId(){
+  var id = localStorage.getItem('ltv_visitor_id');
+  if(!id){
+    id = 'v_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,10);
+    localStorage.setItem('ltv_visitor_id', id);
+  }
+  return id;
+}
+function getUTM(){
+  var stored = localStorage.getItem('ltv_utm');
+  var params = new URLSearchParams(window.location.search);
+  var hasNew = params.get('utm_source') || params.get('utm_medium') || params.get('utm_campaign');
+  if(hasNew){
+    stored = JSON.stringify({
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || ''
+    });
+    localStorage.setItem('ltv_utm', stored);
+  }
+  if(stored) return JSON.parse(stored);
+  return { utm_source: '', utm_medium: '', utm_campaign: '' };
+}
+var VISITOR_ID = getVisitorId();
+var UTM = getUTM();
+var REFERRER = document.referrer || '';
+
+function submitLead(e){
+  e.preventDefault();
+  var name = document.getElementById('leadName').value;
+  var phone = document.getElementById('leadPhone').value;
+  var email = document.getElementById('leadEmail').value;
+  var scenario = document.getElementById('scenarioSelect').value || 'не вказано';
+  fetch('/api/notify-lead', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name: name, phone: phone, email: email, scenario: scenario, visitor_id: VISITOR_ID})
+  }).catch(function(){});
+  trackEvent('lead_submitted', scenario);
+  document.getElementById('leadForm').style.display = 'none';
+  document.getElementById('thankyou').classList.add('show');
+  return false;
+}
+
+function openPolicy(){
+  trackEvent('open_policy','');
+  document.getElementById('policyOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePolicy(){
+  document.getElementById('policyOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('policyOverlay').addEventListener('click', function(e){
+  if(e.target === this) closePolicy();
+});
+
+function trackEvent(eventName, detail){
+  fetch('/api/track-event', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      event: eventName, detail: detail || '',
+      visitor_id: VISITOR_ID,
+      utm_source: UTM.utm_source, utm_medium: UTM.utm_medium, utm_campaign: UTM.utm_campaign,
+      referrer: REFERRER, page: window.location.pathname
+    })
+  }).catch(function(){});
+}
+trackEvent('page_view', '');
+
+function openForm(source){
+  trackEvent('open_form', source || 'unknown');
+  document.getElementById('formOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeForm(){
+  document.getElementById('formOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('formOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeForm();
+});
+
+var scenarioLabels = {
+  '': 'Оберіть варіант зі списку',
+  'Реклама не окупається': 'Реклама подорожчала і не окупається',
+  'Нові аудиторії та канали': 'Хочу нові аудиторії та канали',
+  'Інше': 'Потрібна консультація / інше'
+};
+
+function setScenario(val){
+  document.getElementById('scenarioSelect').value = val;
+  var trigger = document.getElementById('scenarioTrigger');
+  if(trigger) trigger.innerHTML = (scenarioLabels[val] || scenarioLabels['']) + ' <span class="custom-select-arrow">▾</span>';
+}
+
+function pickScenario(val, label){
+  setScenario(val);
+  document.getElementById('scenarioCustom').classList.remove('open');
+}
+
+function toggleScenarioDropdown(){
+  document.getElementById('scenarioCustom').classList.toggle('open');
+}
+
+document.addEventListener('click', function(e){
+  var box = document.getElementById('scenarioCustom');
+  if(box && !box.contains(e.target)) box.classList.remove('open');
+});
+
+document.querySelectorAll('.faq-item').forEach(function(item){
+  item.querySelector('.faq-q').addEventListener('click', function(){
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+    if(!isOpen) item.classList.add('open');
+  });
+});
+
+var testItems = document.querySelectorAll('#testItems input[type=checkbox]');
+var testResult = document.getElementById('testResult');
+function updateTest(){
+  var score = 0, noneCount = 0, haveCount = 0, insights = [];
+  testItems.forEach(function(el){
+    if(el.checked){
+      score += 1;
+      if(el.getAttribute('data-scenario') === 'none') noneCount += 1;
+      if(el.getAttribute('data-scenario') === 'have') haveCount += 1;
+      insights.push(el.getAttribute('data-insight'));
+    }
+  });
+  testResult.classList.add('show');
+  trackEvent('minitest_change', 'score_' + score);
+  if(score === 0){
+    testResult.innerHTML = 'Ваш маркетинг адаптований під поточний ринок. Рекомендуємо регулярний аудит раз на квартал.';
+    return;
+  }
+
+  var urgency;
+  if(score === 1) urgency = 'Поки точкова проблема, але саме з неї часто починається зростання вартості ліда.';
+  else if(score <= 3) urgency = 'Разом ці фактори вже суттєво піднімають вартість ліда і знижують окупність реклами.';
+  else urgency = 'Це комплексна проблема з високим ризиком подальшого зростання витрат — тут потрібен швидкий перезапуск.';
+
+  var insightsHtml = insights.map(function(t){ return '<li>' + t + '</li>'; }).join('');
+
+  var scenarioValue = 'Реклама не окупається';
+  if(haveCount > 0 && noneCount === 0) scenarioValue = 'Нові аудиторії та канали';
+
+  testResult.innerHTML = '<b>Результат:</b> <ul style="margin:8px 0 8px 18px;padding:0">' + insightsHtml + '</ul>' + urgency + ' <a href="#" onclick="setScenario(\'' + scenarioValue + '\');openForm(\'minitest\');return false;" style="color:var(--y-dark);font-weight:700">Отримати безкоштовний аудит →</a>';
+}
+testItems.forEach(function(el){ el.addEventListener('change', updateTest); });
+
+var revealSelector = '.card,.scn-card,.step,.faq-item,.pain-q,.section-head,.pain-conclusion,.test-box,.price-box,.form-section';
+var revealEls = document.querySelectorAll(revealSelector);
+if('IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry, idx){
+      if(entry.isIntersecting){
+        setTimeout(function(){ entry.target.classList.add('in-view'); }, (idx % 6) * 70);
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+  revealEls.forEach(function(el){ io.observe(el); });
+} else {
+  revealEls.forEach(function(el){ el.classList.add('in-view'); });
+}
+</script>
+
+</body>
+</html>
