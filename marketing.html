@@ -707,6 +707,7 @@ function submitLead(e){
     body: JSON.stringify({name: name, phone: phone, email: email, scenario: scenario, visitor_id: VISITOR_ID})
   }).catch(function(){});
   trackEvent('lead_submitted', scenario);
+  if (window.fbq) fbq('track', 'Lead', {content_name: scenario});
   document.getElementById('leadForm').style.display = 'none';
   document.getElementById('thankyou').classList.add('show');
   return false;
