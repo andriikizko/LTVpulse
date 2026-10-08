@@ -211,7 +211,17 @@ function loadData(fromLogin){
 
 function render(data){
   var leads = data.leads || [];
-  var events = data.events || [];
+  var allEvents = data.events || [];
+  var events = allEvents.filter(function(e){ return (e.data && e.data.event) !== 'time_ping'; });
+  function fmtDur(sec){ if(!sec) return '—'; var m=Math.floor(sec/60), s=sec%60; return m ? m+' хв '+(s<10?'0':'')+s+' с' : s+' с'; }
+  var loadMax = {};
+  allEvents.forEach(function(e){
+    var d=e.data||{}; if(d.event!=='time_ping'||!d.visitor_id) return;
+    var p=String(d.detail||'').split('|'); var sec=parseInt(p[1],10)||0;
+    var k=d.visitor_id+'#'+p[0]; if(!loadMax[k]||sec>loadMax[k]) loadMax[k]=sec;
+  });
+  var timeByVisitor = {};
+  Object.keys(loadMax).forEach(function(k){ var v=k.split('#')[0]; timeByVisitor[v]=(timeByVisitor[v]||0)+loadMax[k]; });
 
   if(data.note){
     var noteEl = document.getElementById('dbNote');
@@ -288,10 +298,11 @@ function render(data){
       }
     }
   });
-  var trafficCounts = {};
+  var trafficCounts = {}, trafficTime = {}, trafficTimed = {};
   Object.keys(visitorSource).forEach(function(vid){
     var src = visitorSource[vid];
     trafficCounts[src] = (trafficCounts[src] || 0) + 1;
+    if(timeByVisitor[vid]){ trafficTime[src]=(trafficTime[src]||0)+timeByVisitor[vid]; trafficTimed[src]=(trafficTimed[src]||0)+1; }
   });
   var trafficKeys = Object.keys(trafficCounts).sort(function(a,b){ return trafficCounts[b]-trafficCounts[a]; });
   var trafficMax = trafficKeys.length ? trafficCounts[trafficKeys[0]] : 1;
@@ -301,7 +312,7 @@ function render(data){
   } else {
     trafficKeys.forEach(function(k){
       var pct = Math.round((trafficCounts[k]/trafficMax)*100);
-      trafficHtml += '<div class="bar-row"><div class="bar-label">' + esc(k) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div><div class="bar-count">' + trafficCounts[k] + '</div></div>';
+      trafficHtml += '<div class="bar-row"><div class="bar-label">' + esc(k) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div><div class="bar-count" style="min-width:150px;text-align:right">' + trafficCounts[k] + ' · ⏱ ' + (trafficTimed[k] ? fmtDur(Math.round(trafficTime[k]/trafficTimed[k])) : '—') + '</div></div>';
     });
   }
   document.getElementById('trafficChart').innerHTML = trafficHtml;
@@ -359,7 +370,7 @@ function render(data){
             '<b style="font-size:13px">' + esc(vid) + '</b>' +
             (isLead ? ' <span class="tag" style="background:#DCFCE7;color:#15803D">заявка' + (isLead !== true ? ': ' + esc(isLead) : '') + '</span>' : '') +
           '</div>' +
-          '<div style="font-size:12px;color:var(--gray2)">' + evs.length + ' подій · перший захід ' + esc(new Date(first.created_at).toLocaleString('uk-UA')) + '</div>' +
+          '<div style="font-size:12px;color:var(--gray2)"><b style="color:var(--d2)">⏱ ' + fmtDur(timeByVisitor[vid]) + '</b> · ' + evs.length + ' подій · перший захід ' + esc(new Date(first.created_at).toLocaleString('uk-UA')) + '</div>' +
         '</div>' +
         '<div id="' + rowId + '" style="display:none;padding:0 16px 14px;background:var(--bg-alt)">' + pathHtml + '</div>' +
       '</div>';

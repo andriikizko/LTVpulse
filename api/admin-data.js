@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
     const [leadsRes, eventsRes] = await Promise.all([
       fetch(`${SUPABASE_URL}/rest/v1/leads?select=*&order=created_at.desc&limit=500`, { headers }),
-      fetch(`${SUPABASE_URL}/rest/v1/analytics_events?select=*&order=created_at.desc&limit=200`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/analytics_events?select=*&order=created_at.desc&limit=1500`, { headers }),
     ]);
 
     const leadsRaw = await leadsRes.json();

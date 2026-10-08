@@ -750,6 +750,22 @@ function trackEvent(eventName, detail){
   }).catch(function(){});
 }
 trackEvent('page_view', '');
+(function(){
+  var loadId=Math.random().toString(36).slice(2,8), active=0, last=Date.now(), sent=0;
+  function tick(){var n=Date.now();if(!document.hidden)active+=Math.min(n-last,2000);last=n;}
+  setInterval(tick,1000);
+  document.addEventListener('visibilitychange',function(){last=Date.now();if(document.hidden)ping();});
+  function ping(force){
+    tick();var sec=Math.round(active/1000);
+    if(sec<1||(!force&&sec===sent))return;sent=sec;
+    var body=JSON.stringify({event:'time_ping',detail:loadId+'|'+sec,visitor_id:VISITOR_ID,utm_source:UTM.utm_source,utm_medium:UTM.utm_medium,utm_campaign:UTM.utm_campaign,referrer:REFERRER,page:window.location.pathname});
+    try{ if(navigator.sendBeacon&&navigator.sendBeacon('/api/track-event',new Blob([body],{type:'application/json'})))return; }catch(e){}
+    fetch('/api/track-event',{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true}).catch(function(){});
+  }
+  [10,30,60,120,180,300].forEach(function(t){setTimeout(function(){ping()},t*1000)});
+  setInterval(function(){ if(active>300000)ping() },60000);
+  window.addEventListener('pagehide',function(){ping()});
+})();
 
 function openForm(source){
   trackEvent('open_form', source || 'unknown');
